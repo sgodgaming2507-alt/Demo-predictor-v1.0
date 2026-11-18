@@ -1,348 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIP S_GOD Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Color Prediction Predictor</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-violet: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:#030605;color:white;
-  font-family:Arial,sans-serif;
-}
-.app{
-  max-width:500px;margin:auto;min-height:100vh;
-  padding:14px;
-  background:radial-gradient(circle at top,#10331c,#030605 55%);
-}
-.header{
-  text-align:center;padding:20px;
-  background:#08110b;border:1px solid #39ff1445;
-  border-radius:18px;box-shadow:0 0 18px #39ff1415;
-}
-.logo{font-size:26px;font-weight:900;color:#39ff14;letter-spacing:3px}
-.subtitle{font-size:10px;letter-spacing:3px;color:#8da995;margin-top:6px}
-.badge{
-  display:inline-block;border:1px solid #39ff14;color:#39ff14;
-  padding:6px 13px;border-radius:20px;margin-top:12px;font-size:10px
-}
-.panel{
-  background:#09110c;border:1px solid #1a3b25;
-  padding:17px;border-radius:17px;margin-top:14px;
-}
-.title{
-  color:#39ff14;font-size:12px;font-weight:bold;
-  letter-spacing:2px;margin-bottom:15px;
-}
-.clock{
-  text-align:center;font-size:36px;font-weight:900;
-  color:#39ff14;letter-spacing:3px;
-  text-shadow:0 0 15px #39ff1460;
-}
-.date{text-align:center;font-size:12px;color:#8da995;margin-top:7px}
-.timer-box{
-  margin-top:16px;background:#030805;
-  border:1px solid #20452a;border-radius:14px;padding:15px;
-  text-align:center;
-}
-.timer-label{font-size:10px;color:#8cae98;letter-spacing:2px}
-.timer{
-  font-size:42px;font-weight:900;color:#39ff14;margin-top:8px;
-}
-.timer-caption{font-size:10px;color:#718879;margin-top:5px}
-.progress{
-  height:7px;background:#14251a;border-radius:10px;
-  overflow:hidden;margin-top:14px;
-}
-.progress-fill{
-  height:100%;width:100%;background:#39ff14;
-  box-shadow:0 0 10px #39ff14;
-  transition:width .5s linear;
-}
-.bigsmall{display:flex;gap:12px}
-.choice{
-  flex:1;padding:24px 4px;text-align:center;
-  font-size:22px;font-weight:900;border-radius:14px;background:#030805;
-}
-.big{color:#ffad36;border:1px solid #ffad36}
-.small{color:#38dfff;border:1px solid #38dfff}
-.number-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
-.number{
-  text-align:center;padding:15px 3px;border-radius:12px;
-  background:#030805;border:1px solid #193b25;
-  font-size:19px;font-weight:bold;color:#c5d7ca;
-}
-.number.active{color:#39ff14;border-color:#39ff14;box-shadow:0 0 12px #39ff1425}
-.colors{display:flex;gap:9px}
-.color{
-  flex:1;padding:17px 3px;text-align:center;border-radius:12px;
-  font-size:11px;font-weight:900;background:#030805
-}
-.red{color:#ff4545;border:1px solid #ff4545}
-.green{color:#39ff14;border:1px solid #39ff14}
-.purple{color:#c770ff;border:1px solid #c770ff}
-.sample{
-  text-align:center;background:#030805;border:1px solid #20452a;
-  border-radius:14px;padding:20px;
-}
-.sample-number{
-  font-size:50px;font-weight:900;color:#39ff14;
-  text-shadow:0 0 15px #39ff1450;
-}
-.sample-label{font-size:10px;color:#789985;letter-spacing:2px;margin-top:5px}
-.sample-tags{display:flex;justify-content:center;gap:9px;margin-top:14px}
-.tag{
-  padding:8px 14px;border:1px solid #21452a;
-  border-radius:20px;font-size:11px;color:#b5d0be;
-}
-.note{text-align:center;font-size:10px;color:#718879;line-height:1.6;margin-top:14px}
-.history-item{
-  display:flex;justify-content:space-between;
-  background:#030805;border:1px solid #183b25;
-  border-radius:10px;padding:13px;margin-bottom:8px;font-size:12px;
-}
-.history-item span{color:#39ff14}
-.button{
-  width:100%;padding:15px;border:1px solid #39ff14;
-  background:#0b1a10;color:#39ff14;font-weight:900;
-  border-radius:12px;margin-top:12px;
-}
-.page{display:none}
-.page.active{display:block}
-.nav{
-  display:none;grid-template-columns:repeat(4,1fr);
-  gap:6px;margin-top:16px;position:sticky;bottom:5px;
-  background:#07100b;border:1px solid #183b25;padding:8px;border-radius:14px;
-}
-.nav button{
-  background:transparent;border:0;color:#789985;
-  padding:12px 3px;font-size:10px;border-radius:9px;
-}
-.nav button.active{background:#122719;color:#39ff14}
-.input{
-  width:100%;padding:14px;margin:8px 0;
-  background:#030805;border:1px solid #21462b;
-  color:white;border-radius:10px;outline:none;
-}
-.footer{text-align:center;padding:22px;color:#476250;font-size:10px}
-.refresh{animation:glow .6s ease}
-@keyframes glow{
-  0%{box-shadow:0 0 0 #39ff1400}
-  50%{box-shadow:0 0 25px #39ff1460}
-  100%{box-shadow:0 0 0 #39ff1400}
-}
-</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .prediction-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid var(--accent-violet);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .prediction-number {
+            font-size: 4rem;
+            font-weight: bold;
+            line-height: 1;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        .prediction-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--accent-violet);
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent-violet);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        button:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+
+        button.secondary {
+            background: #334155;
+        }
+        button.secondary:hover {
+            background: #475569;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .history-item {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: #334155;
+        }
+
+        .color-green { background-color: var(--accent-green) !important; color: #000; }
+        .color-red { background-color: var(--accent-red) !important; color: #fff; }
+        .color-violet { background-color: var(--accent-violet) !important; color: #fff; }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
 </head>
-
 <body>
-<div class="app">
 
-<header class="header">
-  <div class="logo">⚡ S_GOD ⚡</div>
-  <div class="subtitle">PREMIUM DEMO SYSTEM</div>
-  <div class="badge">● SYSTEM ONLINE</div>
-</header>
+<div class="container">
+    <h1>🎯 Color Prediction AI</h1>
 
-<!-- LOGIN -->
-<section id="loginPage" class="page active">
-  <div class="panel" style="margin-top:35px">
-    <div class="title">DEMO LOGIN</div>
-    <input id="username" class="input" placeholder="Enter username">
-    <input id="pin" class="input" placeholder="Enter demo PIN" type="password">
-    <button class="button" onclick="login()">ENTER SYSTEM</button>
-    <p class="note">Demo interface</p>
-  </div>
-</section>
-
-<!-- HOME -->
-<section id="homePage" class="page">
-
-  <div class="panel">
-    <div class="title">DEVICE REAL-TIME CLOCK</div>
-    <div id="clock" class="clock">00:00:00</div>
-    <div id="date" class="date">Loading...</div>
-  </div>
-
-  <div class="panel" id="timerPanel">
-    <div class="title">60 SECOND TIMER</div>
-    <div class="timer-box">
-      <div class="timer-label">NEXT MINUTE IN</div>
-      <div class="timer" id="countdown">60</div>
-      <div class="timer-caption">SECONDS</div>
-      <div class="progress">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+    <div class="prediction-card" id="predictionCard">
+        <div class="prediction-label">Next Predicted Number</div>
+        <div class="prediction-number" id="predNumber">?</div>
+        <div class="prediction-label" id="predColor">Waiting for data...</div>
+        <div class="confidence-bar">
+            <div class="confidence-fill" id="confFill"></div>
+        </div>
     </div>
-    <p class="note">Timer is synchronized with your phone clock.</p>
-  </div>
 
-  <div class="panel">
-    <div class="title">BIG / SMALL DISPLAY</div>
-    <div class="bigsmall">
-      <div class="choice big">BIG</div>
-      <div class="choice small">SMALL</div>
+    <div class="controls">
+        <button id="btnPredict" onclick="runPrediction()">🔮 Predict Next</button>
+        <button class="secondary" onclick="resetData()">Reset</button>
     </div>
-    <p class="note">Demo display only</p>
-  </div>
 
-  <div class="panel">
-    <div class="title">NUMBER DISPLAY · 0–9</div>
-    <div class="number-grid">
-      <div class="number">0</div>
-      <div class="number">1</div>
-      <div class="number">2</div>
-      <div class="number">3</div>
-      <div class="number">4</div>
-      <div class="number active">5</div>
-      <div class="number">6</div>
-      <div class="number">7</div>
-      <div class="number">8</div>
-      <div class="number">9</div>
+    <div>
+        <div style="font-size: 0.9rem; margin-bottom: 5px; color: var(--text-muted);">Recent History (Last 5)</div>
+        <div class="history-grid" id="historyGrid">
+            <!-- History items injected here -->
+        </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="title">COLOR DISPLAY</div>
-    <div class="colors">
-      <div class="color red">RED</div>
-      <div class="color green">GREEN</div>
-      <div class="color purple">PURPLE</div>
+    <div class="stats-row">
+        <span>Green: <span id="statGreen">0</span></span>
+        <span>Red: <span id="statRed">0</span></span>
+        <span>Violet: <span id="statViolet">0</span></span>
     </div>
-  </div>
-
-  <div class="panel">
-    <div class="title">SAMPLE CARD</div>
-    <div class="sample">
-      <div class="sample-number">5</div>
-      <div class="sample-label">STATIC DEMO VALUE</div>
-      <div class="sample-tags">
-        <div class="tag">SAMPLE</div>
-        <div class="tag">GREEN</div>
-      </div>
-    </div>
-    <p class="note">Display sample, not an actual prediction.</p>
-  </div>
-
-  <div class="panel">
-    <div class="title">DEMO HISTORY</div>
-    <div id="historyList">
-      <div class="history-item">Demo Entry <span>Sample</span></div>
-      <div class="history-item">Demo Entry <span>Sample</span></div>
-      <div class="history-item">Demo Entry <span>Sample</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- HISTORY -->
-<section id="historyPage" class="page">
-  <div class="panel">
-    <div class="title">HISTORY</div>
-    <div class="history-item">Sample Record <span>Demo</span></div>
-    <div class="history-item">Sample Record <span>Demo</span></div>
-    <div class="history-item">Sample Record <span>Demo</span></div>
-    <div class="history-item">Sample Record <span>Demo</span></div>
-  </div>
-</section>
-
-<!-- SETTINGS -->
-<section id="settingsPage" class="page">
-  <div class="panel">
-    <div class="title">SETTINGS</div>
-    <div class="history-item">Theme <span>Neon Green</span></div>
-    <div class="history-item">Clock <span>Device Sync</span></div>
-    <div class="history-item">Refresh <span>60 Seconds</span></div>
-    <div class="history-item">Version <span>1.0</span></div>
-    <button class="button" onclick="logout()">LOGOUT</button>
-  </div>
-</section>
-
-<!-- NAVIGATION -->
-<div class="nav" id="nav">
-  <button class="active" onclick="showPage('homePage',this)">⌂ HOME</button>
-  <button onclick="showPage('historyPage',this)">◷ HISTORY</button>
-  <button onclick="showPage('settingsPage',this)">⚙ SETTINGS</button>
-  <button onclick="logout()">EXIT</button>
-</div>
-
-<div class="footer">VIP S_GOD · DEMO UI</div>
 </div>
 
 <script>
-let lastMinute = -1;
+    let history = [];
+    const MAX_HISTORY = 50;
 
-function login(){
-  const name = document.getElementById("username").value.trim();
-  if(!name){
-    alert("Enter username first");
-    return;
-  }
-  document.getElementById("loginPage").classList.remove("active");
-  document.getElementById("homePage").classList.add("active");
-  document.getElementById("nav").style.display = "grid";
-  updateClock();
-}
+    // Logic: 0-4 Green, 5-9 Red, 0 & 5 Violet (Standard Wingo logic)
+    function getColor(num) {
+        if (num === 0 || num === 5) return 'Violet';
+        if (num <= 4) return 'Green';
+        return 'Red';
+    }
 
-function logout(){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("loginPage").classList.add("active");
-  document.getElementById("nav").style.display = "none";
-}
+    function getCSSClass(color) {
+        return `color-${color.toLowerCase()}`;
+    }
 
-function showPage(id,btn){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-}
+    function runPrediction() {
+        // If no history, simulate a random start
+        if (history.length === 0) {
+            addRandomToHistory(5);
+        }
 
-function updateClock(){
-  const now = new Date();
+        const last5 = history.slice(-5);
+        
+        // Heuristic 1: Streak Analysis
+        // If the last 3 are the same color, predict a change (Mean Reversion)
+        // If colors are alternating, predict the most frequent "Hot" number.
+        
+        let lastColor = getColor(last5[last5.length - 1]);
+        let prevColor = getColor(last5[last5.length - 2]);
+        
+        // Heuristic 2: Frequency Analysis (Hot Numbers)
+        const freq = {};
+        history.forEach(n => freq[n] = (freq[n] || 0) + 1);
+        
+        const hotNumber = Object.keys(freq).reduce((a, b) => freq[a] >= freq[b] ? a : b);
+        
+        // Heuristic 3: Gap Analysis (Due Numbers)
+        // Numbers 0-9. If a number hasn't appeared in the last 15 rounds, it's "due".
+        let dueNumber = null;
+        for(let i=0; i<=9; i++) {
+            if(!history.slice(-15).includes(i)) {
+                dueNumber = i;
+                break;
+            }
+        }
 
-  const time = now.toLocaleTimeString("en-GB",{
-    hour12:false,
-    hour:"2-digit",
-    minute:"2-digit",
-    second:"2-digit"
-  });
+        let predictedNum;
+        let confidence = 60; // Base confidence
 
-  const date = now.toLocaleDateString("en-IN",{
-    weekday:"long",
-    day:"2-digit",
-    month:"long",
-    year:"numeric"
-  });
+        // Decision Matrix
+        if (lastColor === prevColor && lastColor === getColor(last5[last5.length - 3])) {
+            // Strong Streak: Predict the opposite dominant color
+            const targetColor = lastColor === 'Green' ? 'Red' : 'Green';
+            const candidates = [0,1,2,3,4,5,6,7,8,9].filter(n => getColor(n) === targetColor);
+            // Pick the hottest candidate of the target color
+            predictedNum = candidates.reduce((a, b) => freq[a] >= freq[b] ? a : b, 0);
+            confidence = 75;
+        } else if (dueNumber !== null) {
+            // Due Number Strategy
+            predictedNum = dueNumber;
+            confidence = 65;
+        } else {
+            // Default: Hot Number
+            predictedNum = parseInt(hotNumber);
+            confidence = 55;
+        }
 
-  document.getElementById("clock").textContent = time;
-  document.getElementById("date").textContent = date;
+        // Simulate "AI Thinking" delay
+        setTimeout(() => {
+            updateUI(predictedNum, confidence);
+        }, 300);
+    }
 
-  // Countdown aligned to actual device minute
-  const seconds = now.getSeconds();
-  const remaining = 60 - seconds;
+    function updateUI(num, confidence) {
+        const color = getColor(num);
+        document.getElementById('predNumber').innerText = num;
+        document.getElementById('predNumber').className = `prediction-number ${getCSSClass(color)}`;
+        document.getElementById('predColor').innerText = `Color: ${color}`;
+        
+        const fill = document.getElementById('confFill');
+        fill.style.width = `${confidence}%`;
+        fill.style.background = color === 'Green' ? 'var(--accent-green)' : color === 'Red' ? 'var(--accent-red)' : 'var(--accent-violet)';
+    }
 
-  document.getElementById("countdown").textContent =
-    String(remaining).padStart(2,"0");
+    function addRandomToHistory(count) {
+        for(let i=0; i<count; i++) {
+            const num = Math.floor(Math.random() * 10);
+            history.push(num);
+            if(history.length > MAX_HISTORY) history.shift();
+        }
+        renderHistory();
+    }
 
-  const percent = (remaining / 60) * 100;
-  document.getElementById("progressFill").style.width = percent + "%";
+    function renderHistory() {
+        const grid = document.getElementById('historyGrid');
+        grid.innerHTML = '';
+        // Show last 5
+        const lastFive = history.slice(-5);
+        lastFive.forEach(num => {
+            const div = document.createElement('div');
+            div.className = `history-item ${getCSSClass(getColor(num))}`;
+            div.innerText = num;
+            grid.appendChild(div);
+        });
 
-  // Minute boundary: refresh animation only
-  if(now.getMinutes() !== lastMinute){
-    lastMinute = now.getMinutes();
-    minuteRefresh();
-  }
-}
+        // Update Stats
+        const stats = { Green: 0, Red: 0, Violet: 0 };
+        history.forEach(n => stats[getColor(n)]++);
+        document.getElementById('statGreen').innerText = stats.Green;
+        document.getElementById('statRed').innerText = stats.Red;
+        document.getElementById('statViolet').innerText = stats.Violet;
+    }
 
-function minuteRefresh(){
-  const panel = document.getElementById("timerPanel");
-  panel.classList.remove("refresh");
-  void panel.offsetWidth;
-  panel.classList.add("refresh");
-}
+    function resetData() {
+        history = [];
+        document.getElementById('predNumber').innerText = '?';
+        document.getElementById('predNumber').className = 'prediction-number';
+        document.getElementById('predColor').innerText = 'Reset Complete';
+        document.getElementById('confFill').style.width = '0%';
+        renderHistory();
+    }
 
-updateClock();
-setInterval(updateClock,1000);
+    // Initialize with some dummy data so it looks active
+    addRandomToHistory(10);
 </script>
+
 </body>
 </html>
-
