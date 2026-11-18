@@ -3,623 +3,346 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIP S_GOD</title>
+<title>VIP S_GOD Demo</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#030605;color:white;
+  font-family:Arial,sans-serif;
 }
-
-body {
-    background: #030605;
-    color: #fff;
-    font-family: Arial, sans-serif;
+.app{
+  max-width:500px;margin:auto;min-height:100vh;
+  padding:14px;
+  background:radial-gradient(circle at top,#10331c,#030605 55%);
 }
-
-.app {
-    width: 100%;
-    max-width: 500px;
-    min-height: 100vh;
-    margin: auto;
-    padding: 15px;
-    background:
-        radial-gradient(circle at top, #07351b 0%, #030605 48%);
+.header{
+  text-align:center;padding:20px;
+  background:#08110b;border:1px solid #39ff1445;
+  border-radius:18px;box-shadow:0 0 18px #39ff1415;
 }
-
-.header {
-    padding: 18px;
-    text-align: center;
-    border: 1px solid #39ff1440;
-    border-radius: 18px;
-    background: #07110c;
-    box-shadow: 0 0 20px #39ff1415;
+.logo{font-size:26px;font-weight:900;color:#39ff14;letter-spacing:3px}
+.subtitle{font-size:10px;letter-spacing:3px;color:#8da995;margin-top:6px}
+.badge{
+  display:inline-block;border:1px solid #39ff14;color:#39ff14;
+  padding:6px 13px;border-radius:20px;margin-top:12px;font-size:10px
 }
-
-.logo {
-    color: #39ff14;
-    font-size: 25px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-shadow: 0 0 15px #39ff1460;
+.panel{
+  background:#09110c;border:1px solid #1a3b25;
+  padding:17px;border-radius:17px;margin-top:14px;
 }
-
-.subtitle {
-    color: #8cae98;
-    font-size: 11px;
-    letter-spacing: 3px;
-    margin-top: 6px;
+.title{
+  color:#39ff14;font-size:12px;font-weight:bold;
+  letter-spacing:2px;margin-bottom:15px;
 }
-
-.badge {
-    display: inline-block;
-    color: #39ff14;
-    border: 1px solid #39ff14;
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 10px;
-    margin-top: 12px;
+.clock{
+  text-align:center;font-size:36px;font-weight:900;
+  color:#39ff14;letter-spacing:3px;
+  text-shadow:0 0 15px #39ff1460;
 }
-
-.panel {
-    margin-top: 15px;
-    padding: 17px;
-    background: #09110d;
-    border: 1px solid #183c26;
-    border-radius: 18px;
+.date{text-align:center;font-size:12px;color:#8da995;margin-top:7px}
+.timer-box{
+  margin-top:16px;background:#030805;
+  border:1px solid #20452a;border-radius:14px;padding:15px;
+  text-align:center;
 }
-
-.panel-title {
-    font-size: 12px;
-    color: #39ff14;
-    letter-spacing: 2px;
-    font-weight: bold;
-    margin-bottom: 14px;
+.timer-label{font-size:10px;color:#8cae98;letter-spacing:2px}
+.timer{
+  font-size:42px;font-weight:900;color:#39ff14;margin-top:8px;
 }
-
-.clock {
-    text-align: center;
-    font-size: 35px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: #39ff14;
-    text-shadow: 0 0 20px #39ff1450;
+.timer-caption{font-size:10px;color:#718879;margin-top:5px}
+.progress{
+  height:7px;background:#14251a;border-radius:10px;
+  overflow:hidden;margin-top:14px;
 }
-
-.date {
-    text-align: center;
-    font-size: 12px;
-    color: #8da996;
-    margin-top: 7px;
+.progress-fill{
+  height:100%;width:100%;background:#39ff14;
+  box-shadow:0 0 10px #39ff14;
+  transition:width .5s linear;
 }
-
-.period-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #030805;
-    border: 1px solid #1c3c27;
-    border-radius: 12px;
-    padding: 14px;
-    margin-top: 16px;
+.bigsmall{display:flex;gap:12px}
+.choice{
+  flex:1;padding:24px 4px;text-align:center;
+  font-size:22px;font-weight:900;border-radius:14px;background:#030805;
 }
-
-.period-label {
-    color: #8cae98;
-    font-size: 11px;
+.big{color:#ffad36;border:1px solid #ffad36}
+.small{color:#38dfff;border:1px solid #38dfff}
+.number-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.number{
+  text-align:center;padding:15px 3px;border-radius:12px;
+  background:#030805;border:1px solid #193b25;
+  font-size:19px;font-weight:bold;color:#c5d7ca;
 }
-
-.period-value {
-    color: #39ff14;
-    font-weight: bold;
-    font-size: 19px;
+.number.active{color:#39ff14;border-color:#39ff14;box-shadow:0 0 12px #39ff1425}
+.colors{display:flex;gap:9px}
+.color{
+  flex:1;padding:17px 3px;text-align:center;border-radius:12px;
+  font-size:11px;font-weight:900;background:#030805
 }
-
-.demo-banner {
-    text-align: center;
-    font-size: 10px;
-    color: #ffc94a;
-    letter-spacing: 1px;
-    margin-top: 14px;
+.red{color:#ff4545;border:1px solid #ff4545}
+.green{color:#39ff14;border:1px solid #39ff14}
+.purple{color:#c770ff;border:1px solid #c770ff}
+.sample{
+  text-align:center;background:#030805;border:1px solid #20452a;
+  border-radius:14px;padding:20px;
 }
-
-.big-small {
-    display: flex;
-    gap: 12px;
+.sample-number{
+  font-size:50px;font-weight:900;color:#39ff14;
+  text-shadow:0 0 15px #39ff1450;
 }
-
-.choice {
-    flex: 1;
-    padding: 23px 5px;
-    border-radius: 14px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 900;
-    background: #030805;
+.sample-label{font-size:10px;color:#789985;letter-spacing:2px;margin-top:5px}
+.sample-tags{display:flex;justify-content:center;gap:9px;margin-top:14px}
+.tag{
+  padding:8px 14px;border:1px solid #21452a;
+  border-radius:20px;font-size:11px;color:#b5d0be;
 }
-
-.big {
-    border: 1px solid #ff9c31;
-    color: #ff9c31;
-    box-shadow: 0 0 14px #ff9c3120;
+.note{text-align:center;font-size:10px;color:#718879;line-height:1.6;margin-top:14px}
+.history-item{
+  display:flex;justify-content:space-between;
+  background:#030805;border:1px solid #183b25;
+  border-radius:10px;padding:13px;margin-bottom:8px;font-size:12px;
 }
-
-.small {
-    border: 1px solid #38dfff;
-    color: #38dfff;
-    box-shadow: 0 0 14px #38dfff20;
+.history-item span{color:#39ff14}
+.button{
+  width:100%;padding:15px;border:1px solid #39ff14;
+  background:#0b1a10;color:#39ff14;font-weight:900;
+  border-radius:12px;margin-top:12px;
 }
-
-.number-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 9px;
+.page{display:none}
+.page.active{display:block}
+.nav{
+  display:none;grid-template-columns:repeat(4,1fr);
+  gap:6px;margin-top:16px;position:sticky;bottom:5px;
+  background:#07100b;border:1px solid #183b25;padding:8px;border-radius:14px;
 }
-
-.number {
-    padding: 15px 3px;
-    background: #030805;
-    border: 1px solid #183b25;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 19px;
-    font-weight: bold;
-    color: #d4e5d8;
+.nav button{
+  background:transparent;border:0;color:#789985;
+  padding:12px 3px;font-size:10px;border-radius:9px;
 }
-
-.number.selected {
-    border-color: #39ff14;
-    color: #39ff14;
-    box-shadow: 0 0 13px #39ff1425;
+.nav button.active{background:#122719;color:#39ff14}
+.input{
+  width:100%;padding:14px;margin:8px 0;
+  background:#030805;border:1px solid #21462b;
+  color:white;border-radius:10px;outline:none;
 }
-
-.color-row {
-    display: flex;
-    gap: 10px;
-}
-
-.color-card {
-    flex: 1;
-    text-align: center;
-    padding: 17px 3px;
-    border-radius: 13px;
-    font-size: 11px;
-    font-weight: 900;
-    background: #030805;
-}
-
-.red {
-    color: #ff4545;
-    border: 1px solid #ff4545;
-    box-shadow: 0 0 12px #ff454520;
-}
-
-.green {
-    color: #39ff14;
-    border: 1px solid #39ff14;
-    box-shadow: 0 0 12px #39ff1420;
-}
-
-.purple {
-    color: #c770ff;
-    border: 1px solid #c770ff;
-    box-shadow: 0 0 12px #c770ff20;
-}
-
-.sample-card {
-    text-align: center;
-    background: #030805;
-    border: 1px solid #21462b;
-    border-radius: 15px;
-    padding: 20px;
-}
-
-.sample-number {
-    font-size: 52px;
-    font-weight: 900;
-    color: #39ff14;
-    text-shadow: 0 0 20px #39ff1460;
-}
-
-.sample-label {
-    color: #789985;
-    font-size: 10px;
-    letter-spacing: 2px;
-    margin-top: 5px;
-}
-
-.sample-tags {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.tag {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    border: 1px solid #24432c;
-    color: #b9d1c0;
-}
-
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 10px;
-    margin-bottom: 8px;
-    background: #030805;
-    border: 1px solid #183b25;
-    border-radius: 10px;
-    font-size: 12px;
-}
-
-.history-item span {
-    color: #39ff14;
-}
-
-.button {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #39ff14;
-    background: #0b1a10;
-    color: #39ff14;
-    font-size: 13px;
-    font-weight: 900;
-    border-radius: 12px;
-    margin-top: 13px;
-}
-
-.button:active {
-    background: #15321c;
-}
-
-.note {
-    color: #718879;
-    font-size: 10px;
-    text-align: center;
-    line-height: 1.6;
-    margin-top: 15px;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-}
-
-.nav {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 7px;
-    position: sticky;
-    bottom: 8px;
-    margin-top: 18px;
-    background: #07100b;
-    border: 1px solid #183b25;
-    border-radius: 15px;
-    padding: 8px;
-}
-
-.nav-btn {
-    border: none;
-    border-radius: 10px;
-    background: transparent;
-    color: #789985;
-    padding: 12px 3px;
-    font-size: 10px;
-}
-
-.nav-btn.active {
-    background: #122719;
-    color: #39ff14;
-    border: 1px solid #39ff1440;
-}
-
-.login {
-    margin-top: 45px;
-}
-
-.input {
-    width: 100%;
-    padding: 15px;
-    margin: 8px 0;
-    background: #030805;
-    border: 1px solid #21462b;
-    border-radius: 11px;
-    color: #fff;
-    outline: none;
-}
-
-.footer {
-    text-align: center;
-    padding: 22px 5px;
-    color: #476250;
-    font-size: 10px;
+.footer{text-align:center;padding:22px;color:#476250;font-size:10px}
+.refresh{animation:glow .6s ease}
+@keyframes glow{
+  0%{box-shadow:0 0 0 #39ff1400}
+  50%{box-shadow:0 0 25px #39ff1460}
+  100%{box-shadow:0 0 0 #39ff1400}
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <header class="header">
-    <div class="logo">⚡ S_GOD ⚡</div>
-    <div class="subtitle">PREMIUM DEMO SYSTEM</div>
-    <div class="badge">● SYSTEM ONLINE</div>
+  <div class="logo">⚡ S_GOD ⚡</div>
+  <div class="subtitle">PREMIUM DEMO SYSTEM</div>
+  <div class="badge">● SYSTEM ONLINE</div>
 </header>
 
 <!-- LOGIN -->
-<section id="loginPage" class="login page active">
-    <div class="panel">
-        <div class="panel-title">USER LOGIN</div>
-
-        <input class="input" id="username"
-               placeholder="Enter your name">
-
-        <input class="input" id="pin"
-               placeholder="Enter demo PIN"
-               type="password">
-
-        <button class="button" onclick="login()">
-            ENTER DEMO
-        </button>
-
-        <p class="note">
-            Demo interface only. No real account or prediction service.
-        </p>
-    </div>
+<section id="loginPage" class="page active">
+  <div class="panel" style="margin-top:35px">
+    <div class="title">DEMO LOGIN</div>
+    <input id="username" class="input" placeholder="Enter username">
+    <input id="pin" class="input" placeholder="Enter demo PIN" type="password">
+    <button class="button" onclick="login()">ENTER SYSTEM</button>
+    <p class="note">Demo interface</p>
+  </div>
 </section>
 
 <!-- HOME -->
 <section id="homePage" class="page">
 
-    <div class="panel">
-        <div class="panel-title">REAL TIME CLOCK</div>
+  <div class="panel">
+    <div class="title">DEVICE REAL-TIME CLOCK</div>
+    <div id="clock" class="clock">00:00:00</div>
+    <div id="date" class="date">Loading...</div>
+  </div>
 
-        <div class="clock" id="clock">00:00:00</div>
-        <div class="date" id="date">Loading date...</div>
-
-        <div class="period-box">
-            <div>
-                <div class="period-label">DEMO SESSION</div>
-                <div style="color:#fff;margin-top:5px">LIVE DISPLAY</div>
-            </div>
-            <div class="period-value" id="period">10001</div>
-        </div>
+  <div class="panel" id="timerPanel">
+    <div class="title">60 SECOND TIMER</div>
+    <div class="timer-box">
+      <div class="timer-label">NEXT MINUTE IN</div>
+      <div class="timer" id="countdown">60</div>
+      <div class="timer-caption">SECONDS</div>
+      <div class="progress">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
     </div>
+    <p class="note">Timer is synchronized with your phone clock.</p>
+  </div>
 
-    <div class="panel">
-        <div class="panel-title">BIG / SMALL DISPLAY</div>
-
-        <div class="big-small">
-            <div class="choice big">BIG</div>
-            <div class="choice small">SMALL</div>
-        </div>
-
-        <p class="note">Static demo labels</p>
+  <div class="panel">
+    <div class="title">BIG / SMALL DISPLAY</div>
+    <div class="bigsmall">
+      <div class="choice big">BIG</div>
+      <div class="choice small">SMALL</div>
     </div>
+    <p class="note">Demo display only</p>
+  </div>
 
-    <div class="panel">
-        <div class="panel-title">NUMBER DISPLAY · 0–9</div>
-
-        <div class="number-grid">
-            <div class="number">0</div>
-            <div class="number">1</div>
-            <div class="number">2</div>
-            <div class="number">3</div>
-            <div class="number">4</div>
-            <div class="number selected">5</div>
-            <div class="number">6</div>
-            <div class="number">7</div>
-            <div class="number">8</div>
-            <div class="number">9</div>
-        </div>
+  <div class="panel">
+    <div class="title">NUMBER DISPLAY · 0–9</div>
+    <div class="number-grid">
+      <div class="number">0</div>
+      <div class="number">1</div>
+      <div class="number">2</div>
+      <div class="number">3</div>
+      <div class="number">4</div>
+      <div class="number active">5</div>
+      <div class="number">6</div>
+      <div class="number">7</div>
+      <div class="number">8</div>
+      <div class="number">9</div>
     </div>
+  </div>
 
-    <div class="panel">
-        <div class="panel-title">COLOR DISPLAY</div>
-
-        <div class="color-row">
-            <div class="color-card red">RED</div>
-            <div class="color-card green">GREEN</div>
-            <div class="color-card purple">PURPLE</div>
-        </div>
+  <div class="panel">
+    <div class="title">COLOR DISPLAY</div>
+    <div class="colors">
+      <div class="color red">RED</div>
+      <div class="color green">GREEN</div>
+      <div class="color purple">PURPLE</div>
     </div>
+  </div>
 
-    <div class="panel">
-        <div class="panel-title">SAMPLE RESULT CARD</div>
-
-        <div class="sample-card">
-            <div class="sample-number">5</div>
-            <div class="sample-label">STATIC DEMO NUMBER</div>
-
-            <div class="sample-tags">
-                <div class="tag">SAMPLE</div>
-                <div class="tag">GREEN</div>
-            </div>
-        </div>
-
-        <div class="demo-banner">
-            ★ DISPLAY-ONLY DEMO · NOT A PREDICTION ★
-        </div>
+  <div class="panel">
+    <div class="title">SAMPLE CARD</div>
+    <div class="sample">
+      <div class="sample-number">5</div>
+      <div class="sample-label">STATIC DEMO VALUE</div>
+      <div class="sample-tags">
+        <div class="tag">SAMPLE</div>
+        <div class="tag">GREEN</div>
+      </div>
     </div>
+    <p class="note">Display sample, not an actual prediction.</p>
+  </div>
 
-    <div class="panel">
-        <div class="panel-title">RECENT HISTORY</div>
-
-        <div id="historyList">
-            <div class="history-item">
-                Session 10001 <span>Sample 5</span>
-            </div>
-            <div class="history-item">
-                Session 10000 <span>Sample 3</span>
-            </div>
-            <div class="history-item">
-                Session 9999 <span>Sample 8</span>
-            </div>
-            <div class="history-item">
-                Session 9998 <span>Sample 2</span>
-            </div>
-        </div>
+  <div class="panel">
+    <div class="title">DEMO HISTORY</div>
+    <div id="historyList">
+      <div class="history-item">Demo Entry <span>Sample</span></div>
+      <div class="history-item">Demo Entry <span>Sample</span></div>
+      <div class="history-item">Demo Entry <span>Sample</span></div>
     </div>
-
+  </div>
 </section>
 
 <!-- HISTORY -->
 <section id="historyPage" class="page">
-    <div class="panel">
-        <div class="panel-title">HISTORY PANEL</div>
-
-        <div class="history-item">
-            Demo 10001 <span>5 · GREEN</span>
-        </div>
-        <div class="history-item">
-            Demo 10000 <span>3 · PURPLE</span>
-        </div>
-        <div class="history-item">
-            Demo 9999 <span>8 · RED</span>
-        </div>
-        <div class="history-item">
-            Demo 9998 <span>2 · GREEN</span>
-        </div>
-        <div class="history-item">
-            Demo 9997 <span>7 · PURPLE</span>
-        </div>
-
-        <p class="note">Sample records only.</p>
-    </div>
+  <div class="panel">
+    <div class="title">HISTORY</div>
+    <div class="history-item">Sample Record <span>Demo</span></div>
+    <div class="history-item">Sample Record <span>Demo</span></div>
+    <div class="history-item">Sample Record <span>Demo</span></div>
+    <div class="history-item">Sample Record <span>Demo</span></div>
+  </div>
 </section>
 
 <!-- SETTINGS -->
 <section id="settingsPage" class="page">
-    <div class="panel">
-        <div class="panel-title">SYSTEM SETTINGS</div>
-
-        <div class="history-item">
-            Theme <span>NEON GREEN</span>
-        </div>
-
-        <div class="history-item">
-            System Clock <span>DEVICE TIME</span>
-        </div>
-
-        <div class="history-item">
-            App Version <span>1.0 DEMO</span>
-        </div>
-
-        <button class="button" onclick="logout()">LOGOUT</button>
-    </div>
+  <div class="panel">
+    <div class="title">SETTINGS</div>
+    <div class="history-item">Theme <span>Neon Green</span></div>
+    <div class="history-item">Clock <span>Device Sync</span></div>
+    <div class="history-item">Refresh <span>60 Seconds</span></div>
+    <div class="history-item">Version <span>1.0</span></div>
+    <button class="button" onclick="logout()">LOGOUT</button>
+  </div>
 </section>
 
-<!-- BOTTOM NAV -->
-<div class="nav" id="bottomNav" style="display:none">
-    <button class="nav-btn active" onclick="showPage('homePage',this)">
-        ⌂ HOME
-    </button>
-
-    <button class="nav-btn" onclick="showPage('historyPage',this)">
-        ◷ HISTORY
-    </button>
-
-    <button class="nav-btn" onclick="showPage('settingsPage',this)">
-        ⚙ SETTINGS
-    </button>
-
-    <button class="nav-btn" onclick="logout()">
-        ↪ EXIT
-    </button>
+<!-- NAVIGATION -->
+<div class="nav" id="nav">
+  <button class="active" onclick="showPage('homePage',this)">⌂ HOME</button>
+  <button onclick="showPage('historyPage',this)">◷ HISTORY</button>
+  <button onclick="showPage('settingsPage',this)">⚙ SETTINGS</button>
+  <button onclick="logout()">EXIT</button>
 </div>
 
-<div class="footer">
-    VIP S_GOD · NEON DEMO UI
-</div>
-
+<div class="footer">VIP S_GOD · DEMO UI</div>
 </div>
 
 <script>
+let lastMinute = -1;
 
-// LOGIN
-function login() {
-    const name = document.getElementById("username").value.trim();
-
-    if (!name) {
-        alert("Please enter your name");
-        return;
-    }
-
-    document.getElementById("loginPage").classList.remove("active");
-    document.getElementById("homePage").classList.add("active");
-
-    document.getElementById("bottomNav").style.display = "grid";
+function login(){
+  const name = document.getElementById("username").value.trim();
+  if(!name){
+    alert("Enter username first");
+    return;
+  }
+  document.getElementById("loginPage").classList.remove("active");
+  document.getElementById("homePage").classList.add("active");
+  document.getElementById("nav").style.display = "grid";
+  updateClock();
 }
 
-// NAVIGATION
-function showPage(pageId, button) {
-
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
-
-    document.getElementById(pageId).classList.add("active");
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
-
-    if (button) {
-        button.classList.add("active");
-    }
+function logout(){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("loginPage").classList.add("active");
+  document.getElementById("nav").style.display = "none";
 }
 
-// LOGOUT
-function logout() {
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
-
-    document.getElementById("loginPage").classList.add("active");
-    document.getElementById("bottomNav").style.display = "none";
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
+function showPage(id,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
 }
 
-// REAL DEVICE CLOCK
-function updateClock() {
+function updateClock(){
+  const now = new Date();
 
-    const now = new Date();
+  const time = now.toLocaleTimeString("en-GB",{
+    hour12:false,
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit"
+  });
 
-    const time = now.toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-    });
+  const date = now.toLocaleDateString("en-IN",{
+    weekday:"long",
+    day:"2-digit",
+    month:"long",
+    year:"numeric"
+  });
 
-    const date = now.toLocaleDateString("en-IN", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric"
-    });
+  document.getElementById("clock").textContent = time;
+  document.getElementById("date").textContent = date;
 
-    document.getElementById("clock").textContent = time;
-    document.getElementById("date").textContent = date;
+  // Countdown aligned to actual device minute
+  const seconds = now.getSeconds();
+  const remaining = 60 - seconds;
+
+  document.getElementById("countdown").textContent =
+    String(remaining).padStart(2,"0");
+
+  const percent = (remaining / 60) * 100;
+  document.getElementById("progressFill").style.width = percent + "%";
+
+  // Minute boundary: refresh animation only
+  if(now.getMinutes() !== lastMinute){
+    lastMinute = now.getMinutes();
+    minuteRefresh();
+  }
 }
 
-// Clock updates every second using phone time
+function minuteRefresh(){
+  const panel = document.getElementById("timerPanel");
+  panel.classList.remove("refresh");
+  void panel.offsetWidth;
+  panel.classList.add("refresh");
+}
+
 updateClock();
-setInterval(updateClock, 1000);
-
+setInterval(updateClock,1000);
 </script>
-
 </body>
 </html>
+
