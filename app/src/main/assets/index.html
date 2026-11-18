@@ -1,516 +1,625 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIP S_GOD Demo Predictor</title>
+<title>VIP S_GOD</title>
 
 <style>
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --green: #39ff14;
-  --cyan: #00e5ff;
-  --bg: #05090d;
-  --panel: #0b151a;
-  --text: #ffffff;
-  --muted: #84949b;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top, #10341b 0%, #05090d 48%);
-  font-family: Arial, sans-serif;
-  color: var(--text);
-  display: flex;
-  justify-content: center;
-  padding: 15px;
+    background: #030605;
+    color: #fff;
+    font-family: Arial, sans-serif;
 }
 
 .app {
-  width: 100%;
-  max-width: 440px;
-  min-height: 92vh;
-  border: 1px solid var(--green);
-  border-radius: 25px;
-  box-shadow: 0 0 18px #39ff1440;
-  background: linear-gradient(180deg, #07110e, #05090d);
-  overflow: hidden;
-  position: relative;
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 15px;
+    background:
+        radial-gradient(circle at top, #07351b 0%, #030605 48%);
 }
 
 .header {
-  padding: 22px 18px 14px;
-  text-align: center;
+    padding: 18px;
+    text-align: center;
+    border: 1px solid #39ff1440;
+    border-radius: 18px;
+    background: #07110c;
+    box-shadow: 0 0 20px #39ff1415;
 }
 
 .logo {
-  font-size: 27px;
-  font-weight: 900;
-  color: var(--green);
-  text-shadow: 0 0 12px #39ff1460;
+    color: #39ff14;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px #39ff1460;
 }
 
 .subtitle {
-  font-size: 12px;
-  color: var(--cyan);
-  letter-spacing: 3px;
-  margin-top: 5px;
+    color: #8cae98;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-top: 6px;
 }
 
-.demo-badge {
-  display: inline-block;
-  background: var(--green);
-  color: black;
-  font-weight: 900;
-  border-radius: 20px;
-  padding: 5px 15px;
-  margin-top: 12px;
-  font-size: 12px;
-}
-
-.screen {
-  padding: 15px;
-}
-
-.hidden {
-  display: none !important;
+.badge {
+    display: inline-block;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 10px;
+    margin-top: 12px;
 }
 
 .panel {
-  background: var(--panel);
-  border: 1px solid #39ff1470;
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 15px;
-  box-shadow: 0 0 12px #39ff1415;
+    margin-top: 15px;
+    padding: 17px;
+    background: #09110d;
+    border: 1px solid #183c26;
+    border-radius: 18px;
 }
 
-input {
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  border: 1px solid #39ff1470;
-  border-radius: 14px;
-  outline: none;
-  background: #07100f;
-  color: white;
-  font-size: 15px;
+.panel-title {
+    font-size: 12px;
+    color: #39ff14;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 14px;
 }
 
-input:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 10px #39ff1430;
+.clock {
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #39ff14;
+    text-shadow: 0 0 20px #39ff1450;
 }
 
-.btn {
-  width: 100%;
-  border: 0;
-  border-radius: 14px;
-  padding: 15px;
-  font-size: 16px;
-  font-weight: 900;
-  margin-top: 10px;
-  cursor: pointer;
-  background: linear-gradient(90deg, #20c900, #8cff00);
-  color: #001500;
-  box-shadow: 0 0 12px #39ff1440;
+.date {
+    text-align: center;
+    font-size: 12px;
+    color: #8da996;
+    margin-top: 7px;
 }
 
-.btn.secondary {
-  background: #08120f;
-  color: var(--green);
-  border: 1px solid var(--green);
+.period-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #030805;
+    border: 1px solid #1c3c27;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 16px;
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: default;
+.period-label {
+    color: #8cae98;
+    font-size: 11px;
 }
 
-.stats {
-  display: flex;
-  gap: 10px;
+.period-value {
+    color: #39ff14;
+    font-weight: bold;
+    font-size: 19px;
 }
 
-.stat {
-  flex: 1;
-  text-align: center;
-  background: #08120f;
-  border: 1px solid #39ff1460;
-  border-radius: 14px;
-  padding: 14px 5px;
+.demo-banner {
+    text-align: center;
+    font-size: 10px;
+    color: #ffc94a;
+    letter-spacing: 1px;
+    margin-top: 14px;
 }
 
-.stat-label {
-  font-size: 12px;
-  color: #aaa;
+.big-small {
+    display: flex;
+    gap: 12px;
 }
 
-.stat-value {
-  font-size: 23px;
-  font-weight: 900;
-  color: var(--green);
-  margin-top: 7px;
+.choice {
+    flex: 1;
+    padding: 23px 5px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 900;
+    background: #030805;
 }
 
-.timer-wrap {
-  text-align: center;
-  margin: 24px 0;
+.big {
+    border: 1px solid #ff9c31;
+    color: #ff9c31;
+    box-shadow: 0 0 14px #ff9c3120;
 }
 
-.timer-circle {
-  width: 190px;
-  height: 190px;
-  margin: auto;
-  border-radius: 50%;
-  border: 9px solid #12351a;
-  border-top-color: var(--green);
-  border-right-color: var(--cyan);
-  box-shadow: 0 0 25px #39ff1430, inset 0 0 20px #39ff1410;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.small {
+    border: 1px solid #38dfff;
+    color: #38dfff;
+    box-shadow: 0 0 14px #38dfff20;
 }
 
-.timer {
-  font-size: 42px;
-  font-weight: 900;
-  color: white;
+.number-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 9px;
 }
 
-.timer-label {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 5px;
+.number {
+    padding: 15px 3px;
+    background: #030805;
+    border: 1px solid #183b25;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    color: #d4e5d8;
 }
 
-.status {
-  text-align: center;
-  padding: 12px;
-  color: var(--green);
-  background: #07120c;
-  border: 1px solid #39ff1470;
-  border-radius: 12px;
-  font-weight: 900;
-  font-size: 13px;
-  margin-bottom: 15px;
+.number.selected {
+    border-color: #39ff14;
+    color: #39ff14;
+    box-shadow: 0 0 13px #39ff1425;
 }
 
-.result-box {
-  background: #050a0d;
-  border: 1px solid var(--cyan);
-  border-radius: 16px;
-  text-align: center;
-  padding: 20px;
+.color-row {
+    display: flex;
+    gap: 10px;
 }
 
-.result-title {
-  font-size: 13px;
-  color: #aab7bc;
+.color-card {
+    flex: 1;
+    text-align: center;
+    padding: 17px 3px;
+    border-radius: 13px;
+    font-size: 11px;
+    font-weight: 900;
+    background: #030805;
 }
 
-.result {
-  font-size: 30px;
-  font-weight: 900;
-  margin-top: 12px;
-  color: var(--green);
-  text-shadow: 0 0 15px #39ff1460;
+.red {
+    color: #ff4545;
+    border: 1px solid #ff4545;
+    box-shadow: 0 0 12px #ff454520;
 }
 
-.disclaimer {
-  text-align: center;
-  color: #738087;
-  font-size: 10px;
-  margin: 15px 0;
+.green {
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    box-shadow: 0 0 12px #39ff1420;
 }
 
-.nav {
-  display: flex;
-  border-top: 1px solid #39ff1450;
-  margin-top: 20px;
+.purple {
+    color: #c770ff;
+    border: 1px solid #c770ff;
+    box-shadow: 0 0 12px #c770ff20;
 }
 
-.nav button {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: #8b999e;
-  padding: 15px 3px;
-  font-size: 12px;
-  cursor: pointer;
+.sample-card {
+    text-align: center;
+    background: #030805;
+    border: 1px solid #21462b;
+    border-radius: 15px;
+    padding: 20px;
 }
 
-.nav button.active {
-  color: var(--green);
-  font-weight: bold;
+.sample-number {
+    font-size: 52px;
+    font-weight: 900;
+    color: #39ff14;
+    text-shadow: 0 0 20px #39ff1460;
+}
+
+.sample-label {
+    color: #789985;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+.sample-tags {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tag {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #24432c;
+    color: #b9d1c0;
 }
 
 .history-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  background: #07110f;
-  border: 1px solid #24432b;
-  padding: 13px;
-  border-radius: 12px;
-  margin-top: 9px;
-  font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 10px;
+    margin-bottom: 8px;
+    background: #030805;
+    border: 1px solid #183b25;
+    border-radius: 10px;
+    font-size: 12px;
 }
 
-.history-result {
-  font-weight: 900;
-  color: var(--green);
+.history-item span {
+    color: #39ff14;
+}
+
+.button {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #39ff14;
+    background: #0b1a10;
+    color: #39ff14;
+    font-size: 13px;
+    font-weight: 900;
+    border-radius: 12px;
+    margin-top: 13px;
+}
+
+.button:active {
+    background: #15321c;
+}
+
+.note {
+    color: #718879;
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+    position: sticky;
+    bottom: 8px;
+    margin-top: 18px;
+    background: #07100b;
+    border: 1px solid #183b25;
+    border-radius: 15px;
+    padding: 8px;
+}
+
+.nav-btn {
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #789985;
+    padding: 12px 3px;
+    font-size: 10px;
+}
+
+.nav-btn.active {
+    background: #122719;
+    color: #39ff14;
+    border: 1px solid #39ff1440;
+}
+
+.login {
+    margin-top: 45px;
+}
+
+.input {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    background: #030805;
+    border: 1px solid #21462b;
+    border-radius: 11px;
+    color: #fff;
+    outline: none;
 }
 
 .footer {
-  text-align: center;
-  font-size: 10px;
-  color: #647178;
-  padding: 12px;
-}
-
-@media (max-width: 360px) {
-  .logo { font-size: 23px; }
-  .timer-circle { width: 160px; height: 160px; }
-  .timer { font-size: 35px; }
+    text-align: center;
+    padding: 22px 5px;
+    color: #476250;
+    font-size: 10px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
-  <div class="header">
-    <div class="logo">♛ VIP S_GOD ♛</div>
-    <div class="subtitle">PREDICTOR DEMO</div>
-    <div class="demo-badge">DEMO VERSION</div>
-  </div>
+<header class="header">
+    <div class="logo">⚡ S_GOD ⚡</div>
+    <div class="subtitle">PREMIUM DEMO SYSTEM</div>
+    <div class="badge">● SYSTEM ONLINE</div>
+</header>
 
-  <!-- LOGIN SCREEN -->
-  <section id="loginScreen" class="screen">
+<!-- LOGIN -->
+<section id="loginPage" class="login page active">
     <div class="panel">
-      <h2 style="text-align:center;color:#39ff14;margin-bottom:8px">
-        Welcome to Demo App
-      </h2>
-      <p style="text-align:center;color:#aaa;font-size:13px">
-        Login to continue
-      </p>
+        <div class="panel-title">USER LOGIN</div>
 
-      <input id="demoName" placeholder="Enter your name">
-      <input id="demoPin" placeholder="Enter demo PIN" type="password">
+        <input class="input" id="username"
+               placeholder="Enter your name">
 
-      <button class="btn" onclick="login()">⚡ ENTER DEMO</button>
+        <input class="input" id="pin"
+               placeholder="Enter demo PIN"
+               type="password">
 
-      <p class="disclaimer">Demo only • No real account required</p>
+        <button class="button" onclick="login()">
+            ENTER DEMO
+        </button>
+
+        <p class="note">
+            Demo interface only. No real account or prediction service.
+        </p>
     </div>
-  </section>
+</section>
 
-  <!-- HOME SCREEN -->
-  <section id="homeScreen" class="screen hidden">
+<!-- HOME -->
+<section id="homePage" class="page">
 
-    <div class="panel stats">
-      <div class="stat">
-        <div class="stat-label">PERIOD</div>
-        <div id="period" class="stat-value">10001</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">TIME</div>
-        <div id="topTimer" class="stat-value">01:00</div>
-      </div>
-    </div>
+    <div class="panel">
+        <div class="panel-title">REAL TIME CLOCK</div>
 
-    <div class="timer-wrap">
-      <div class="timer-circle">
-        <div id="timer" class="timer">01:00</div>
-        <div class="timer-label">MIN : SEC</div>
-      </div>
-    </div>
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Loading date...</div>
 
-    <div id="status" class="status">● SYSTEM READY</div>
-
-    <div class="result-box">
-      <div class="result-title">DEMO RESULT</div>
-      <div id="result" class="result">--</div>
+        <div class="period-box">
+            <div>
+                <div class="period-label">DEMO SESSION</div>
+                <div style="color:#fff;margin-top:5px">LIVE DISPLAY</div>
+            </div>
+            <div class="period-value" id="period">10001</div>
+        </div>
     </div>
 
-    <button id="startBtn" class="btn" onclick="startSimulation()">
-      ▶ START SIMULATION
+    <div class="panel">
+        <div class="panel-title">BIG / SMALL DISPLAY</div>
+
+        <div class="big-small">
+            <div class="choice big">BIG</div>
+            <div class="choice small">SMALL</div>
+        </div>
+
+        <p class="note">Static demo labels</p>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">NUMBER DISPLAY · 0–9</div>
+
+        <div class="number-grid">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number selected">5</div>
+            <div class="number">6</div>
+            <div class="number">7</div>
+            <div class="number">8</div>
+            <div class="number">9</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">COLOR DISPLAY</div>
+
+        <div class="color-row">
+            <div class="color-card red">RED</div>
+            <div class="color-card green">GREEN</div>
+            <div class="color-card purple">PURPLE</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">SAMPLE RESULT CARD</div>
+
+        <div class="sample-card">
+            <div class="sample-number">5</div>
+            <div class="sample-label">STATIC DEMO NUMBER</div>
+
+            <div class="sample-tags">
+                <div class="tag">SAMPLE</div>
+                <div class="tag">GREEN</div>
+            </div>
+        </div>
+
+        <div class="demo-banner">
+            ★ DISPLAY-ONLY DEMO · NOT A PREDICTION ★
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">RECENT HISTORY</div>
+
+        <div id="historyList">
+            <div class="history-item">
+                Session 10001 <span>Sample 5</span>
+            </div>
+            <div class="history-item">
+                Session 10000 <span>Sample 3</span>
+            </div>
+            <div class="history-item">
+                Session 9999 <span>Sample 8</span>
+            </div>
+            <div class="history-item">
+                Session 9998 <span>Sample 2</span>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- HISTORY -->
+<section id="historyPage" class="page">
+    <div class="panel">
+        <div class="panel-title">HISTORY PANEL</div>
+
+        <div class="history-item">
+            Demo 10001 <span>5 · GREEN</span>
+        </div>
+        <div class="history-item">
+            Demo 10000 <span>3 · PURPLE</span>
+        </div>
+        <div class="history-item">
+            Demo 9999 <span>8 · RED</span>
+        </div>
+        <div class="history-item">
+            Demo 9998 <span>2 · GREEN</span>
+        </div>
+        <div class="history-item">
+            Demo 9997 <span>7 · PURPLE</span>
+        </div>
+
+        <p class="note">Sample records only.</p>
+    </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settingsPage" class="page">
+    <div class="panel">
+        <div class="panel-title">SYSTEM SETTINGS</div>
+
+        <div class="history-item">
+            Theme <span>NEON GREEN</span>
+        </div>
+
+        <div class="history-item">
+            System Clock <span>DEVICE TIME</span>
+        </div>
+
+        <div class="history-item">
+            App Version <span>1.0 DEMO</span>
+        </div>
+
+        <button class="button" onclick="logout()">LOGOUT</button>
+    </div>
+</section>
+
+<!-- BOTTOM NAV -->
+<div class="nav" id="bottomNav" style="display:none">
+    <button class="nav-btn active" onclick="showPage('homePage',this)">
+        ⌂ HOME
     </button>
 
-    <p class="disclaimer">
-      Simulated output only — not a real prediction.
-    </p>
-  </section>
+    <button class="nav-btn" onclick="showPage('historyPage',this)">
+        ◷ HISTORY
+    </button>
 
-  <!-- HISTORY SCREEN -->
-  <section id="historyScreen" class="screen hidden">
-    <div class="panel">
-      <h3 style="color:#39ff14;text-align:center;margin-bottom:12px">
-        ◷ DEMO HISTORY
-      </h3>
-      <div id="historyList"></div>
-    </div>
-    <button class="btn secondary" onclick="clearHistory()">CLEAR DEMO HISTORY</button>
-  </section>
+    <button class="nav-btn" onclick="showPage('settingsPage',this)">
+        ⚙ SETTINGS
+    </button>
 
-  <!-- SETTINGS SCREEN -->
-  <section id="settingsScreen" class="screen hidden">
-    <div class="panel">
-      <h3 style="text-align:center;color:#39ff14">⚙ SETTINGS</h3>
-      <p style="text-align:center;margin-top:15px">VIP S_GOD Demo</p>
-      <p style="text-align:center;color:#aaa;margin-top:8px">Version 1.0</p>
-      <p style="text-align:center;color:#00e5ff;margin-top:8px">Simulation Mode</p>
-      <button class="btn secondary" onclick="logout()">LOG OUT</button>
-    </div>
-  </section>
+    <button class="nav-btn" onclick="logout()">
+        ↪ EXIT
+    </button>
+</div>
 
-  <!-- BOTTOM NAV -->
-  <div id="navigation" class="nav hidden">
-    <button id="navHome" class="active" onclick="showTab('home')">⌂<br>Home</button>
-    <button id="navHistory" onclick="showTab('history')">▤<br>History</button>
-    <button id="navSettings" onclick="showTab('settings')">⚙<br>Settings</button>
-  </div>
-
-  <div class="footer">S_GOD DEMO • SIMULATION ONLY</div>
+<div class="footer">
+    VIP S_GOD · NEON DEMO UI
+</div>
 
 </div>
 
 <script>
-let period = 10001;
-let seconds = 60;
-let running = false;
-let interval = null;
-let historyData = [];
 
+// LOGIN
 function login() {
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("homeScreen").classList.remove("hidden");
-  document.getElementById("navigation").classList.remove("hidden");
-}
+    const name = document.getElementById("username").value.trim();
 
-function logout() {
-  stopTimer();
-  document.getElementById("settingsScreen").classList.add("hidden");
-  document.getElementById("navigation").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-}
-
-function showTab(tab) {
-  ["homeScreen","historyScreen","settingsScreen"].forEach(id => {
-    document.getElementById(id).classList.add("hidden");
-  });
-
-  document.querySelectorAll(".nav button").forEach(b => {
-    b.classList.remove("active");
-  });
-
-  if(tab === "home") {
-    document.getElementById("homeScreen").classList.remove("hidden");
-    document.getElementById("navHome").classList.add("active");
-  }
-
-  if(tab === "history") {
-    document.getElementById("historyScreen").classList.remove("hidden");
-    document.getElementById("navHistory").classList.add("active");
-    renderHistory();
-  }
-
-  if(tab === "settings") {
-    document.getElementById("settingsScreen").classList.remove("hidden");
-    document.getElementById("navSettings").classList.add("active");
-  }
-}
-
-function startSimulation() {
-  if(running) return;
-
-  running = true;
-  seconds = 60;
-
-  const btn = document.getElementById("startBtn");
-  btn.disabled = true;
-  btn.textContent = "SIMULATION RUNNING";
-
-  document.getElementById("status").textContent = "◉ ANIMATION RUNNING";
-
-  updateTimer();
-
-  interval = setInterval(() => {
-    seconds--;
-
-    if(seconds <= 0) {
-      seconds = 60;
-      period++;
-      generateDemoResult();
+    if (!name) {
+        alert("Please enter your name");
+        return;
     }
 
-    updateTimer();
-  }, 1000);
+    document.getElementById("loginPage").classList.remove("active");
+    document.getElementById("homePage").classList.add("active");
+
+    document.getElementById("bottomNav").style.display = "grid";
 }
 
-function generateDemoResult() {
-  const samples = ["SAMPLE A", "SAMPLE B"];
-  const value = samples[Math.floor(Math.random() * samples.length)];
+// NAVIGATION
+function showPage(pageId, button) {
 
-  document.getElementById("period").textContent = period;
-  document.getElementById("result").textContent = value;
-  document.getElementById("status").textContent = "✓ DEMO PERIOD UPDATED";
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
 
-  historyData.unshift({
-    period: period,
-    result: value,
-    time: new Date().toLocaleTimeString()
-  });
+    document.getElementById(pageId).classList.add("active");
 
-  renderHistory();
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if (button) {
+        button.classList.add("active");
+    }
 }
 
-function updateTimer() {
-  const formatted = "00:" + String(seconds).padStart(2,"0");
-  document.getElementById("timer").textContent = formatted;
-  document.getElementById("topTimer").textContent = formatted;
+// LOGOUT
+function logout() {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById("loginPage").classList.add("active");
+    document.getElementById("bottomNav").style.display = "none";
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
 }
 
-function renderHistory() {
-  const list = document.getElementById("historyList");
+// REAL DEVICE CLOCK
+function updateClock() {
 
-  if(historyData.length === 0) {
-    list.innerHTML = '<p style="text-align:center;color:#89979c;padding:15px">No demo events yet</p>';
-    return;
-  }
+    const now = new Date();
 
-  list.innerHTML = historyData.map(item => `
-    <div class="history-item">
-      <span>#${item.period}</span>
-      <span class="history-result">${item.result}</span>
-      <span style="color:#8b999e">${item.time}</span>
-    </div>
-  `).join("");
+    const time = now.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+
+    const date = now.toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+
+    document.getElementById("clock").textContent = time;
+    document.getElementById("date").textContent = date;
 }
 
-function clearHistory() {
-  historyData = [];
-  renderHistory();
-}
+// Clock updates every second using phone time
+updateClock();
+setInterval(updateClock, 1000);
 
-function stopTimer() {
-  running = false;
-  if(interval) {
-    clearInterval(interval);
-    interval = null;
-  }
-}
-
-updateTimer();
-renderHistory();
 </script>
+
 </body>
 </html>
