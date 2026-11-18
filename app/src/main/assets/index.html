@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP S_GOD Demo Predictor</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green: #39ff14;
+  --cyan: #00e5ff;
+  --bg: #05090d;
+  --panel: #0b151a;
+  --text: #ffffff;
+  --muted: #84949b;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #10341b 0%, #05090d 48%);
+  font-family: Arial, sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+.app {
+  width: 100%;
+  max-width: 440px;
+  min-height: 92vh;
+  border: 1px solid var(--green);
+  border-radius: 25px;
+  box-shadow: 0 0 18px #39ff1440;
+  background: linear-gradient(180deg, #07110e, #05090d);
+  overflow: hidden;
+  position: relative;
+}
+
+.header {
+  padding: 22px 18px 14px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: 900;
+  color: var(--green);
+  text-shadow: 0 0 12px #39ff1460;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  margin-top: 5px;
+}
+
+.demo-badge {
+  display: inline-block;
+  background: var(--green);
+  color: black;
+  font-weight: 900;
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.screen {
+  padding: 15px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid #39ff1470;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 12px #39ff1415;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: 1px solid #39ff1470;
+  border-radius: 14px;
+  outline: none;
+  background: #07100f;
+  color: white;
+  font-size: 15px;
+}
+
+input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 10px #39ff1430;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 900;
+  margin-top: 10px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #20c900, #8cff00);
+  color: #001500;
+  box-shadow: 0 0 12px #39ff1440;
+}
+
+.btn.secondary {
+  background: #08120f;
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.stats {
+  display: flex;
+  gap: 10px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  background: #08120f;
+  border: 1px solid #39ff1460;
+  border-radius: 14px;
+  padding: 14px 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.stat-value {
+  font-size: 23px;
+  font-weight: 900;
+  color: var(--green);
+  margin-top: 7px;
+}
+
+.timer-wrap {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.timer-circle {
+  width: 190px;
+  height: 190px;
+  margin: auto;
+  border-radius: 50%;
+  border: 9px solid #12351a;
+  border-top-color: var(--green);
+  border-right-color: var(--cyan);
+  box-shadow: 0 0 25px #39ff1430, inset 0 0 20px #39ff1410;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer {
+  font-size: 42px;
+  font-weight: 900;
+  color: white;
+}
+
+.timer-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.status {
+  text-align: center;
+  padding: 12px;
+  color: var(--green);
+  background: #07120c;
+  border: 1px solid #39ff1470;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.result-box {
+  background: #050a0d;
+  border: 1px solid var(--cyan);
+  border-radius: 16px;
+  text-align: center;
+  padding: 20px;
+}
+
+.result-title {
+  font-size: 13px;
+  color: #aab7bc;
+}
+
+.result {
+  font-size: 30px;
+  font-weight: 900;
+  margin-top: 12px;
+  color: var(--green);
+  text-shadow: 0 0 15px #39ff1460;
+}
+
+.disclaimer {
+  text-align: center;
+  color: #738087;
+  font-size: 10px;
+  margin: 15px 0;
+}
+
+.nav {
+  display: flex;
+  border-top: 1px solid #39ff1450;
+  margin-top: 20px;
+}
+
+.nav button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #8b999e;
+  padding: 15px 3px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav button.active {
+  color: var(--green);
+  font-weight: bold;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  background: #07110f;
+  border: 1px solid #24432b;
+  padding: 13px;
+  border-radius: 12px;
+  margin-top: 9px;
+  font-size: 13px;
+}
+
+.history-result {
+  font-weight: 900;
+  color: var(--green);
+}
+
+.footer {
+  text-align: center;
+  font-size: 10px;
+  color: #647178;
+  padding: 12px;
+}
+
+@media (max-width: 360px) {
+  .logo { font-size: 23px; }
+  .timer-circle { width: 160px; height: 160px; }
+  .timer { font-size: 35px; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo">♛ VIP S_GOD ♛</div>
+    <div class="subtitle">PREDICTOR DEMO</div>
+    <div class="demo-badge">DEMO VERSION</div>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <section id="loginScreen" class="screen">
+    <div class="panel">
+      <h2 style="text-align:center;color:#39ff14;margin-bottom:8px">
+        Welcome to Demo App
+      </h2>
+      <p style="text-align:center;color:#aaa;font-size:13px">
+        Login to continue
+      </p>
+
+      <input id="demoName" placeholder="Enter your name">
+      <input id="demoPin" placeholder="Enter demo PIN" type="password">
+
+      <button class="btn" onclick="login()">⚡ ENTER DEMO</button>
+
+      <p class="disclaimer">Demo only • No real account required</p>
+    </div>
+  </section>
+
+  <!-- HOME SCREEN -->
+  <section id="homeScreen" class="screen hidden">
+
+    <div class="panel stats">
+      <div class="stat">
+        <div class="stat-label">PERIOD</div>
+        <div id="period" class="stat-value">10001</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">TIME</div>
+        <div id="topTimer" class="stat-value">01:00</div>
+      </div>
+    </div>
+
+    <div class="timer-wrap">
+      <div class="timer-circle">
+        <div id="timer" class="timer">01:00</div>
+        <div class="timer-label">MIN : SEC</div>
+      </div>
+    </div>
+
+    <div id="status" class="status">● SYSTEM READY</div>
+
+    <div class="result-box">
+      <div class="result-title">DEMO RESULT</div>
+      <div id="result" class="result">--</div>
+    </div>
+
+    <button id="startBtn" class="btn" onclick="startSimulation()">
+      ▶ START SIMULATION
+    </button>
+
+    <p class="disclaimer">
+      Simulated output only — not a real prediction.
+    </p>
+  </section>
+
+  <!-- HISTORY SCREEN -->
+  <section id="historyScreen" class="screen hidden">
+    <div class="panel">
+      <h3 style="color:#39ff14;text-align:center;margin-bottom:12px">
+        ◷ DEMO HISTORY
+      </h3>
+      <div id="historyList"></div>
+    </div>
+    <button class="btn secondary" onclick="clearHistory()">CLEAR DEMO HISTORY</button>
+  </section>
+
+  <!-- SETTINGS SCREEN -->
+  <section id="settingsScreen" class="screen hidden">
+    <div class="panel">
+      <h3 style="text-align:center;color:#39ff14">⚙ SETTINGS</h3>
+      <p style="text-align:center;margin-top:15px">VIP S_GOD Demo</p>
+      <p style="text-align:center;color:#aaa;margin-top:8px">Version 1.0</p>
+      <p style="text-align:center;color:#00e5ff;margin-top:8px">Simulation Mode</p>
+      <button class="btn secondary" onclick="logout()">LOG OUT</button>
+    </div>
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <div id="navigation" class="nav hidden">
+    <button id="navHome" class="active" onclick="showTab('home')">⌂<br>Home</button>
+    <button id="navHistory" onclick="showTab('history')">▤<br>History</button>
+    <button id="navSettings" onclick="showTab('settings')">⚙<br>Settings</button>
+  </div>
+
+  <div class="footer">S_GOD DEMO • SIMULATION ONLY</div>
+
+</div>
+
+<script>
+let period = 10001;
+let seconds = 60;
+let running = false;
+let interval = null;
+let historyData = [];
+
+function login() {
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("homeScreen").classList.remove("hidden");
+  document.getElementById("navigation").classList.remove("hidden");
+}
+
+function logout() {
+  stopTimer();
+  document.getElementById("settingsScreen").classList.add("hidden");
+  document.getElementById("navigation").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
+
+function showTab(tab) {
+  ["homeScreen","historyScreen","settingsScreen"].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
+
+  document.querySelectorAll(".nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if(tab === "home") {
+    document.getElementById("homeScreen").classList.remove("hidden");
+    document.getElementById("navHome").classList.add("active");
+  }
+
+  if(tab === "history") {
+    document.getElementById("historyScreen").classList.remove("hidden");
+    document.getElementById("navHistory").classList.add("active");
+    renderHistory();
+  }
+
+  if(tab === "settings") {
+    document.getElementById("settingsScreen").classList.remove("hidden");
+    document.getElementById("navSettings").classList.add("active");
+  }
+}
+
+function startSimulation() {
+  if(running) return;
+
+  running = true;
+  seconds = 60;
+
+  const btn = document.getElementById("startBtn");
+  btn.disabled = true;
+  btn.textContent = "SIMULATION RUNNING";
+
+  document.getElementById("status").textContent = "◉ ANIMATION RUNNING";
+
+  updateTimer();
+
+  interval = setInterval(() => {
+    seconds--;
+
+    if(seconds <= 0) {
+      seconds = 60;
+      period++;
+      generateDemoResult();
+    }
+
+    updateTimer();
+  }, 1000);
+}
+
+function generateDemoResult() {
+  const samples = ["SAMPLE A", "SAMPLE B"];
+  const value = samples[Math.floor(Math.random() * samples.length)];
+
+  document.getElementById("period").textContent = period;
+  document.getElementById("result").textContent = value;
+  document.getElementById("status").textContent = "✓ DEMO PERIOD UPDATED";
+
+  historyData.unshift({
+    period: period,
+    result: value,
+    time: new Date().toLocaleTimeString()
+  });
+
+  renderHistory();
+}
+
+function updateTimer() {
+  const formatted = "00:" + String(seconds).padStart(2,"0");
+  document.getElementById("timer").textContent = formatted;
+  document.getElementById("topTimer").textContent = formatted;
+}
+
+function renderHistory() {
+  const list = document.getElementById("historyList");
+
+  if(historyData.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:#89979c;padding:15px">No demo events yet</p>';
+    return;
+  }
+
+  list.innerHTML = historyData.map(item => `
+    <div class="history-item">
+      <span>#${item.period}</span>
+      <span class="history-result">${item.result}</span>
+      <span style="color:#8b999e">${item.time}</span>
+    </div>
+  `).join("");
+}
+
+function clearHistory() {
+  historyData = [];
+  renderHistory();
+}
+
+function stopTimer() {
+  running = false;
+  if(interval) {
+    clearInterval(interval);
+    interval = null;
+  }
+}
+
+updateTimer();
+renderHistory();
+</script>
+</body>
+</html>
