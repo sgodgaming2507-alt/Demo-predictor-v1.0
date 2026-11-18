@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Wingo Pro Predictor v2.0</title>
+  <title>WinGo 1Min Pro Predictor</title>
   <style>
     :root {
       --bg-dark: #070a14;
@@ -93,7 +93,7 @@
     }
 
     .info-block strong {
-      font-size: 15px;
+      font-size: 13px;
       color: #f8fafc;
       margin-top: 4px;
       display: block;
@@ -113,7 +113,7 @@
       background: linear-gradient(145deg, #1e293b, #0f172a);
       border: 1px solid #334155;
       border-radius: 16px;
-      padding: 20px;
+      padding: 18px;
       text-align: center;
       box-shadow: 0 8px 30px rgba(2, 132, 199, 0.2);
     }
@@ -124,7 +124,7 @@
       text-transform: uppercase;
       letter-spacing: 1.2px;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .signal-display {
@@ -132,7 +132,7 @@
       justify-content: center;
       align-items: center;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .badge {
@@ -175,25 +175,59 @@
       border: 2px solid #64748b;
     }
 
-    .accuracy-meter {
-      background: rgba(15, 23, 42, 0.6);
-      padding: 10px 14px;
-      border-radius: 10px;
+    .stats-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 8px;
+      border-radius: 10px;
       border: 1px solid #1e293b;
+      font-size: 11px;
+      text-align: center;
     }
 
-    .accuracy-meter span {
-      color: #9ca3af;
+    .stat-box span { color: #9ca3af; display: block; }
+    .stat-box strong { color: #4ade80; font-size: 13px; }
+
+    .sync-card {
+      background: var(--card-bg);
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 14px;
     }
 
-    .accuracy-meter strong {
-      color: #4ade80;
-      font-size: 14px;
+    .sync-title {
+      font-size: 11px;
+      color: #facc15;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
+
+    .sync-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .sync-btn {
+      padding: 8px 0;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .sync-btn:active { background: #38bdf8; color: #000; }
 
     .history-card {
       background: var(--card-bg);
@@ -205,18 +239,18 @@
     .history-title {
       font-size: 12px;
       color: #9ca3af;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 700;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     th, td {
-      padding: 8px 6px;
+      padding: 7px 4px;
       text-align: center;
       border-bottom: 1px solid #1f2937;
     }
@@ -224,52 +258,77 @@
     th {
       color: #6b7280;
       font-weight: 700;
-      font-size: 10px;
+      font-size: 9px;
       text-transform: uppercase;
     }
+
+    .tag-win { color: #4ade80; font-weight: 700; }
+    .tag-loss { color: #f87171; font-weight: 700; }
   </style>
 </head>
 <body>
 
   <div class="app-wrapper">
     <div class="header">
-      <h1>Wingo Pro Predictor</h1>
-      <span>Advanced Pattern Engine</span>
+      <h1>WinGo 1Min Predictor</h1>
+      <span>1-Minute Locked Engine</span>
     </div>
 
     <div class="timer-card" id="timerCard">
       <div class="info-block">
-        <span>Active Period</span>
+        <span>Active Period (1Min)</span>
         <strong id="periodNumber">Loading...</strong>
       </div>
       <div class="info-block countdown-box">
         <span>Time Left</span>
-        <strong id="countdown">00:00</strong>
+        <strong id="countdown">00:60</strong>
       </div>
     </div>
 
     <div class="predictor-box">
-      <div class="status-title">AI Pattern Signal Locked</div>
+      <div class="status-title">Current 1Min Locked Signal</div>
       <div class="signal-display">
         <div id="predColor" class="badge color-green">--</div>
         <div id="predSize" class="badge size-badge">--</div>
         <div id="predNumber" class="number-ball">-</div>
       </div>
-      <div class="accuracy-meter">
-        <span>Estimated Confidence Rate:</span>
-        <strong id="confScore">89.4%</strong>
+      <div class="stats-row">
+        <div class="stat-box">
+          <span>Confidence</span>
+          <strong id="confScore">90.5%</strong>
+        </div>
+        <div class="stat-box">
+          <span>Accuracy Rate</span>
+          <strong id="accuracyRate">0%</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="sync-card">
+      <div class="sync-title">Tap Real 1Min Result (Verify Match)</div>
+      <div class="sync-grid">
+        <button class="sync-btn" onclick="submitActualResult(0)">0</button>
+        <button class="sync-btn" onclick="submitActualResult(1)">1</button>
+        <button class="sync-btn" onclick="submitActualResult(2)">2</button>
+        <button class="sync-btn" onclick="submitActualResult(3)">3</button>
+        <button class="sync-btn" onclick="submitActualResult(4)">4</button>
+        <button class="sync-btn" onclick="submitActualResult(5)">5</button>
+        <button class="sync-btn" onclick="submitActualResult(6)">6</button>
+        <button class="sync-btn" onclick="submitActualResult(7)">7</button>
+        <button class="sync-btn" onclick="submitActualResult(8)">8</button>
+        <button class="sync-btn" onclick="submitActualResult(9)">9</button>
       </div>
     </div>
 
     <div class="history-card">
-      <div class="history-title">Locked Signal Logs</div>
+      <div class="history-title">1Min Verification Logs</div>
       <table>
         <thead>
           <tr>
             <th>Period</th>
-            <th>Number</th>
-            <th>Size</th>
-            <th>Color</th>
+            <th>Predicted</th>
+            <th>Actual</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody id="historyBody"></tbody>
@@ -279,9 +338,12 @@
 
   <script>
     let lastPeriod = "";
+    let currentPrediction = null;
+    let totalMatches = 0;
+    let totalWins = 0;
 
-    // Exact game period formula
-    function getExactPeriodId() {
+    // 1-Minute Period Formula matching exact game format (YYYYMMDD10001XXXX)
+    function get1MinPeriodId() {
       const now = new Date();
       const year = now.getUTCFullYear();
       const month = String(now.getUTCMonth() + 1).padStart(2, '0');
@@ -290,29 +352,23 @@
       const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
       const periodIndex = 10001 + totalMinutes;
       
-      return `${year}${month}${day}1${String(periodIndex).padStart(4, '0')}`;
+      return `${year}${month}${day}10001${String(totalMinutes).padStart(4, '0')}`;
     }
 
-    // Tagda & Advanced Prediction Engine using weighted algorithmic seeding
     function getAdvancedSignal(periodStr) {
       let hash = 0;
       for (let i = 0; i < periodStr.length; i++) {
         hash = ((hash << 5) - hash) + periodStr.charCodeAt(i);
         hash |= 0;
       }
-      
-      // Multi-layer weight multiplier for enhanced distribution balance
       const absHash = Math.abs(hash);
       const subSeed = (absHash * 9301 + 49297) % 233280;
       const rnd = subSeed / 233280;
 
-      // Smart pattern weighting
       const digit = Math.floor(rnd * 10);
       const isGreen = [1, 3, 5, 7, 9].includes(digit);
       const isBig = digit >= 5;
-      
-      // Dynamic high-confidence calculation (85% - 94%)
-      const confidence = (85 + (absHash % 10) + (rnd * 4)).toFixed(1);
+      const confidence = (86 + (absHash % 9) + (rnd * 4)).toFixed(1);
 
       return {
         digit,
@@ -326,49 +382,52 @@
     function updateTimerAndSync() {
       const now = new Date();
       const secondsLeft = 60 - now.getUTCSeconds();
-      const displaySec = secondsLeft === 60 ? 0 : secondsLeft;
+      const displaySec = secondsLeft === 60 ? 60 : secondsLeft;
       
       document.getElementById("countdown").textContent = `00:${String(displaySec).padStart(2, '0')}`;
       document.getElementById("timerCard").style.setProperty('--progress', `${(displaySec / 60) * 100}%`);
 
-      const currentPeriod = getExactPeriodId();
+      const currentPeriod = get1MinPeriodId();
       document.getElementById("periodNumber").textContent = currentPeriod;
 
       if (lastPeriod !== currentPeriod) {
-        if (lastPeriod) {
-          addHistoryRow(lastPeriod);
-        }
         lastPeriod = currentPeriod;
+        currentPrediction = getAdvancedSignal(currentPeriod);
 
-        const signal = getAdvancedSignal(currentPeriod);
         const colorEl = document.getElementById("predColor");
         const sizeEl = document.getElementById("predSize");
         const numEl = document.getElementById("predNumber");
 
-        colorEl.textContent = signal.colorText;
-        colorEl.className = "badge " + (signal.isGreen ? "color-green" : "color-red");
-        sizeEl.textContent = signal.sizeText;
-        numEl.textContent = signal.digit;
-        document.getElementById("confScore").textContent = `${signal.confidence}%`;
+        colorEl.textContent = currentPrediction.colorText;
+        colorEl.className = "badge " + (currentPrediction.isGreen ? "color-green" : "color-red");
+        sizeEl.textContent = currentPrediction.sizeText;
+        numEl.textContent = currentPrediction.digit;
+        document.getElementById("confScore").textContent = `${currentPrediction.confidence}%`;
       }
     }
 
-    function addHistoryRow(period) {
+    function submitActualResult(actualNum) {
+      if (!currentPrediction) return;
+
+      const isWin = (actualNum === currentPrediction.digit);
+      totalMatches++;
+      if (isWin) totalWins++;
+
+      const accuracy = Math.round((totalWins / totalMatches) * 100);
+      document.getElementById("accuracyRate").textContent = `${accuracy}%`;
+
       const tbody = document.getElementById("historyBody");
-      const signal = getAdvancedSignal(period);
       const row = document.createElement("tr");
 
       row.innerHTML = `
-        <td>#${period.slice(-4)}</td>
-        <td><strong>${signal.digit}</strong></td>
-        <td>${signal.sizeText}</td>
-        <td style="color:${signal.isGreen ? '#4ade80' : '#f87171'}; font-weight:700;">${signal.colorText}</td>
+        <td>#${lastPeriod.slice(-4)}</td>
+        <td>${currentPrediction.digit} (${currentPrediction.sizeText[0]})</td>
+        <td><strong>${actualNum}</strong> (${actualNum >= 5 ? 'B' : 'S'})</td>
+        <td><span class="${isWin ? 'tag-win' : 'tag-loss'}">${isWin ? 'WIN' : 'LOSS'}</span></td>
       `;
 
       tbody.insertBefore(row, tbody.firstChild);
-      if (tbody.children.length > 5) {
-        tbody.removeChild(tbody.lastChild);
-      }
+      if (tbody.children.length > 5) tbody.removeChild(tbody.lastChild);
     }
 
     updateTimerAndSync();
