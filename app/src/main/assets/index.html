@@ -1,508 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>WinGo 1Min Pro Predictor</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-    :root {
-      --bg-gradient: radial-gradient(circle at top, #111b33 0%, #050811 70%);
-      --card-bg: rgba(17, 24, 39, 0.75);
-      --card-border: rgba(56, 189, 248, 0.18);
-      --accent-cyan: #38bdf8;
-      --accent-purple: #c084fc;
-      --green: #22c55e;
-      --red: #ef4444;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background: var(--bg-gradient);
-      color: #f8fafc;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 16px 12px;
-      overflow-x: hidden;
-    }
-
-    .app-wrapper {
-      width: 100%;
-      max-width: 410px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Header */
-    .header {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .header h1 {
-      font-size: 18px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #38bdf8, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 0.5px;
-    }
-
-    .header span {
-      font-size: 10px;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-weight: 600;
-      margin-top: 4px;
-      display: block;
-    }
-
-    /* Timer Card */
-    .timer-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    .timer-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 4px; height: 100%;
-      background: linear-gradient(180deg, #38bdf8, #c084fc);
-    }
-
-    .timer-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #38bdf8, #c084fc);
-      width: var(--progress, 100%);
-      transition: width 1s linear;
-    }
-
-    .info-block span {
-      font-size: 10px;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: block;
-      font-weight: 600;
-    }
-
-    .info-block strong {
-      font-size: 14px;
-      color: #ffffff;
-      margin-top: 3px;
-      display: block;
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-    }
-
-    .countdown-box {
-      text-align: right;
-    }
-
-    .countdown-box strong {
-      font-size: 24px;
-      color: #facc15;
-      text-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
-    }
-
-    /* Predictor Box */
-    .predictor-box {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 22px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 15px 35px rgba(2, 132, 199, 0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .status-title {
-      font-size: 11px;
-      color: var(--accent-cyan);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
-
-    .signal-display {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .badge {
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-
-    .color-green {
-      background: rgba(34, 197, 94, 0.15);
-      color: #4ade80;
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
-    }
-
-    .color-red {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-    }
-
-    .size-badge {
-      background: rgba(56, 189, 248, 0.12);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
-    }
-
-    .number-ball {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #475569, #0f172a);
-      color: #ffffff;
-      font-size: 22px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #94a3b8;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    }
-
-    .stats-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .stat-box {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .stat-box span { color: #94a3b8; display: block; font-weight: 500; }
-    .stat-box strong { color: #4ade80; font-size: 14px; font-weight: 700; margin-top: 2px; display: block; }
-
-    /* Sync Card */
-    .sync-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    .sync-title {
-      font-size: 11px;
-      color: #facc15;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .sync-grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
-    }
-
-    .sync-btn {
-      padding: 10px 0;
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      color: #fff;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .sync-btn:active {
-      background: var(--accent-cyan);
-      color: #070a14;
-      transform: scale(0.92);
-    }
-
-    /* History Card */
-    .history-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    .history-title {
-      font-size: 11px;
-      color: #94a3b8;
-      margin-bottom: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-
-    th, td {
-      padding: 8px 6px;
-      text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    th {
-      color: #64748b;
-      font-weight: 700;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .tag-win { color: #4ade80; font-weight: 800; }
-    .tag-loss { color: #f87171; font-weight: 800; }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0.85); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinGo Pro Predictor</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+ --blue:#35caff;
+ --purple:#9b65ff;
+ --red:#ff416b;
+ --green:#30e99a;
+ --bg:#050914;
+}
+body{
+ background:var(--bg);
+ color:#fff;
+ font-family:Arial,sans-serif;
+ min-height:100vh;
+ overflow-x:hidden;
+ padding:20px 14px 40px;
+}
+body:before{
+ content:"";
+ position:fixed;inset:0;z-index:-2;
+ background:
+ radial-gradient(ellipse at 20% 10%,#182c55 0%,transparent 45%),
+ radial-gradient(ellipse at 90% 50%,#241344 0%,transparent 40%),
+ #050914;
+}
+#particles{
+ position:fixed;inset:0;z-index:-1;
+ pointer-events:none;
+}
+.particle{
+ position:absolute;width:3px;height:3px;
+ background:#48cfff;border-radius:50%;
+ box-shadow:0 0 12px #35caff;
+ animation:float linear infinite;
+}
+@keyframes float{
+ from{transform:translateY(105vh);opacity:0}
+ 20%{opacity:.8}
+ to{transform:translateY(-10vh);opacity:0}
+}
+.container{max-width:480px;margin:auto}
+.header{
+ margin-top:100px;
+ padding:22px 10px;
+ text-align:center;
+ border:1px solid #263e61;
+ border-radius:22px;
+ background:linear-gradient(135deg,#131e32,#101426);
+ box-shadow:0 0 30px #2775ff16,inset 0 0 20px #ffffff05;
+ animation:entrance .8s ease;
+}
+.logo{
+ font-size:22px;font-weight:900;
+ background:linear-gradient(90deg,#36d8ff,#a18aff,#36d8ff);
+ background-size:200%;
+ color:transparent;
+ background-clip:text;
+ animation:shine 3s linear infinite;
+}
+@keyframes shine{to{background-position:200%}}
+.sub{color:#8594b0;font-size:11px;letter-spacing:3px;margin-top:7px}
+.card{
+ margin-top:16px;
+ padding:20px;
+ border-radius:23px;
+ background:linear-gradient(145deg,#141f32,#101525);
+ border:1px solid #273c5b;
+ box-shadow:0 10px 35px #0005,inset 0 0 20px #ffffff04;
+ position:relative;overflow:hidden;
+ animation:entrance .8s ease both;
+}
+.card:before{
+ content:"";position:absolute;
+ top:0;left:-100%;width:70%;height:1px;
+ background:linear-gradient(90deg,transparent,#40cfff,transparent);
+ animation:scan 4s linear infinite;
+}
+@keyframes scan{to{left:130%}}
+@keyframes entrance{
+ from{opacity:0;transform:translateY(25px)}
+ to{opacity:1;transform:translateY(0)}
+}
+.period{
+ display:flex;justify-content:space-between;align-items:center;
+}
+.muted{color:#8998b0;font-size:11px;font-weight:bold;letter-spacing:1px}
+.period-no{font-size:15px;font-weight:800;margin-top:7px}
+.timer{
+ color:#ffdc38;font-size:27px;font-weight:900;
+ text-shadow:0 0 18px #ffce35;
+}
+.progress{
+ height:4px;background:#222b40;
+ border-radius:10px;margin-top:16px;overflow:hidden;
+}
+.progress span{
+ display:block;height:100%;width:50%;
+ background:linear-gradient(90deg,#35caff,#ae69ff);
+ box-shadow:0 0 12px #35caff;
+ transition:width 1s linear;
+}
+.signal{text-align:center;padding:23px 12px}
+.live{
+ color:#45caff;font-size:12px;font-weight:bold;
+ letter-spacing:2px;
+ animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+ 50%{opacity:.45;text-shadow:0 0 20px #36caff}
+}
+.signals{
+ display:flex;justify-content:center;align-items:center;
+ gap:13px;margin:20px 0;
+}
+.tag{
+ padding:12px 20px;border-radius:13px;
+ font-size:18px;font-weight:900;
+ border:1px solid;
+ animation:glow 2s infinite alternate;
+}
+.red{color:#ff647e;border-color:#a63858;background:#ff345b18;box-shadow:0 0 20px #ff345b24}
+.big{color:#40caff;border-color:#25668d;background:#24baff18;box-shadow:0 0 20px #24baff24}
+.number{
+ width:58px;height:58px;border-radius:50%;
+ display:grid;place-items:center;
+ font-size:26px;font-weight:900;
+ border:3px solid #8294ae;
+ background:radial-gradient(circle at 30% 20%,#65748a,#192337 65%);
+ box-shadow:0 0 22px #7b9fff50,inset 0 0 15px #fff2;
+ animation:rotateIn .7s ease,numberGlow 2s infinite alternate;
+}
+@keyframes rotateIn{
+ from{transform:rotateY(180deg) scale(.4);opacity:0}
+ to{transform:rotateY(0) scale(1);opacity:1}
+}
+@keyframes numberGlow{
+ to{box-shadow:0 0 35px #4bbaff80,inset 0 0 20px #fff4}
+}
+@keyframes glow{to{filter:brightness(1.4)}}
+.stats{
+ display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.stat{
+ text-align:center;padding:13px;
+ border-radius:14px;background:#101a2c;
+ border:1px solid #202e46;
+}
+.stat small{display:block;color:#8b9ab2;font-size:11px}
+.stat strong{display:block;color:var(--green);margin-top:5px;font-size:15px}
+.section-title{
+ text-align:center;color:#ffdc38;
+ font-size:12px;font-weight:900;letter-spacing:1px;
+ margin-bottom:16px;
+}
+.digits{
+ display:grid;grid-template-columns:repeat(10,1fr);gap:5px;
+}
+.digit{
+ padding:12px 0;border-radius:10px;
+ background:linear-gradient(145deg,#202d42,#131d2d);
+ color:white;border:1px solid #2a3c56;
+ font-size:13px;font-weight:bold;
+ cursor:pointer;transition:.25s;
+}
+.digit:active{transform:scale(.85)}
+.digit:hover{border-color:#40caff;box-shadow:0 0 15px #35caff55}
+.logs{margin-top:18px}
+.logrow{
+ display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+ padding:12px 0;text-align:center;
+ font-size:11px;color:#a8b7d0;
+ border-bottom:1px solid #27334a;
+ animation:entrance .4s ease;
+}
+.loghead{color:#74849e;font-weight:bold}
+.empty{color:#64738c;text-align:center;padding:18px;font-size:12px}
+.footer{text-align:center;margin-top:22px;color:#65738b;font-size:10px;letter-spacing:2px}
+</style>
 </head>
 <body>
+<div id="particles"></div>
+<div class="container">
 
-  <div class="app-wrapper">
-    <!-- Header -->
-    <div class="header">
-      <h1>WinGo Pro Predictor</h1>
-      <span>AI Neural Engine v3.0</span>
-    </div>
+<div class="header">
+ <div class="logo">✦ WinGo Pro Predictor ✦</div>
+ <div class="sub">AI NEURAL INTERFACE V4.0</div>
+</div>
 
-    <!-- Timer Card -->
-    <div class="timer-card" id="timerCard">
-      <div class="info-block">
-        <span>Active Period</span>
-        <strong id="periodNumber">Loading...</strong>
-      </div>
-      <div class="info-block countdown-box">
-        <span>Time Left</span>
-        <strong id="countdown">00:60</strong>
-      </div>
-    </div>
-
-    <!-- Predictor Box -->
-    <div class="predictor-box">
-      <div class="status-title">✦ Live Signal Locked ✦</div>
-      <div class="signal-display" id="signalDisplay">
-        <div id="predColor" class="badge color-green">--</div>
-        <div id="predSize" class="badge size-badge">--</div>
-        <div id="predNumber" class="number-ball">-</div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-box">
-          <span>Confidence</span>
-          <strong id="confScore">92.4%</strong>
-        </div>
-        <div class="stat-box">
-          <span>Accuracy Rate</span>
-          <strong id="accuracyRate">0%</strong>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sync / Verification Panel -->
-    <div class="sync-card">
-      <div class="sync-title">Tap Real Result (Verify Match)</div>
-      <div class="sync-grid">
-        <button class="sync-btn" onclick="submitActualResult(0)">0</button>
-        <button class="sync-btn" onclick="submitActualResult(1)">1</button>
-        <button class="sync-btn" onclick="submitActualResult(2)">2</button>
-        <button class="sync-btn" onclick="submitActualResult(3)">3</button>
-        <button class="sync-btn" onclick="submitActualResult(4)">4</button>
-        <button class="sync-btn" onclick="submitActualResult(5)">5</button>
-        <button class="sync-btn" onclick="submitActualResult(6)">6</button>
-        <button class="sync-btn" onclick="submitActualResult(7)">7</button>
-        <button class="sync-btn" onclick="submitActualResult(8)">8</button>
-        <button class="sync-btn" onclick="submitActualResult(9)">9</button>
-      </div>
-    </div>
-
-    <!-- History Logs -->
-    <div class="history-card">
-      <div class="history-title">Verification Logs</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Period</th>
-            <th>Predicted</th>
-            <th>Actual</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="historyBody"></tbody>
-      </table>
-    </div>
+<div class="card">
+ <div class="period">
+  <div>
+   <div class="muted">ACTIVE PERIOD</div>
+   <div class="period-no" id="period">2026111900010286</div>
   </div>
+  <div style="text-align:right">
+   <div class="muted">TIME LEFT</div>
+   <div class="timer" id="timer">00:30</div>
+  </div>
+ </div>
+ <div class="progress"><span id="bar"></span></div>
+</div>
 
-  <script>
-    let lastPeriod = "";
-    let currentPrediction = null;
-    let totalMatches = 0;
-    let totalWins = 0;
+<div class="card signal">
+ <div class="live">✦ LIVE SIGNAL SYSTEM ✦</div>
+ <div class="signals">
+  <div class="tag red" id="color">RED</div>
+  <div class="tag big" id="size">BIG</div>
+  <div class="number" id="number">6</div>
+ </div>
+ <div class="stats">
+  <div class="stat">
+   <small>DEMO SIGNAL</small>
+   <strong>ACTIVE</strong>
+  </div>
+  <div class="stat">
+   <small>VERIFIED RESULTS</small>
+   <strong id="count">0</strong>
+  </div>
+ </div>
+</div>
 
-    function get1MinPeriodId() {
-      const now = new Date();
-      const year = now.getUTCFullYear();
-      const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-      const day = String(now.getUTCDate()).padStart(2, '0');
-      
-      const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-      const periodIndex = 10001 + totalMinutes;
-      
-      return `${year}${month}${day}10001${String(totalMinutes).padStart(4, '0')}`;
-    }
+<div class="card">
+ <div class="section-title">TAP REAL RESULT (VERIFY MATCH)</div>
+ <div class="digits" id="digits"></div>
+</div>
 
-    function getDynamicSignal(periodStr) {
-      const randomSeed = Math.floor(Math.random() * 1000) + Date.now() % 97;
-      let hash = randomSeed;
-      for (let i = 0; i < periodStr.length; i++) {
-        hash = ((hash << 5) - hash) + periodStr.charCodeAt(i) + i;
-        hash |= 0;
-      }
-      const absHash = Math.abs(hash);
-      const digit = absHash % 10;
-      const isGreen = [1, 3, 5, 7, 9].includes(digit);
-      const isBig = digit >= 5;
-      const confidence = (87 + (absHash % 9)).toFixed(1);
+<div class="card logs">
+ <div class="muted" style="margin-bottom:18px">VERIFICATION LOGS</div>
+ <div class="logrow loghead">
+  <span>PERIOD</span><span>DEMO</span>
+  <span>ACTUAL</span><span>STATUS</span>
+ </div>
+ <div id="history">
+  <div class="empty">AWAITING RESULT INPUT...</div>
+ </div>
+</div>
 
-      return {
-        digit,
-        colorText: isGreen ? "GREEN" : "RED",
-        isGreen,
-        sizeText: isBig ? "BIG" : "SMALL",
-        confidence
-      };
-    }
+<div class="footer">WIN GO PRO • NEURAL UI V4.0</div>
+</div>
 
-    function updateTimerAndSync() {
-      const now = new Date();
-      const secondsLeft = 60 - now.getUTCSeconds();
-      const displaySec = secondsLeft === 60 ? 60 : secondsLeft;
-      
-      document.getElementById("countdown").textContent = `00:${String(displaySec).padStart(2, '0')}`;
-      document.getElementById("timerCard").style.setProperty('--progress', `${(displaySec / 60) * 100}%`);
+<script>
+const particleBox=document.getElementById('particles');
+for(let i=0;i<35;i++){
+ const p=document.createElement('div');
+ p.className='particle';
+ p.style.left=Math.random()*100+'%';
+ p.style.animationDuration=(6+Math.random()*12)+'s';
+ p.style.animationDelay=(-Math.random()*15)+'s';
+ particleBox.appendChild(p);
+}
 
-      const currentPeriod = get1MinPeriodId();
-      document.getElementById("periodNumber").textContent = currentPeriod;
+let time=30;
+let period=286;
+let verified=0;
+let demoNumber=6;
 
-      if (lastPeriod !== currentPeriod) {
-        lastPeriod = currentPeriod;
-        currentPrediction = getDynamicSignal(currentPeriod);
+const $=id=>document.getElementById(id);
 
-        const colorEl = document.getElementById("predColor");
-        const sizeEl = document.getElementById("predSize");
-        const numEl = document.getElementById("predNumber");
-        const display = document.getElementById("signalDisplay");
+function updateTimer(){
+ time--;
+ if(time<0){
+  time=30;
+  period++;
+  $('period').textContent='2026111900010'+period;
+  demoNumber=Math.floor(Math.random()*10);
+  updateSignal();
+ }
+ $('timer').textContent='00:'+String(time).padStart(2,'0');
+ $('bar').style.width=(time/30*100)+'%';
+}
+setInterval(updateTimer,1000);
 
-        colorEl.textContent = currentPrediction.colorText;
-        colorEl.className = "badge " + (currentPrediction.isGreen ? "color-green" : "color-red");
-        sizeEl.textContent = currentPrediction.sizeText;
-        numEl.textContent = currentPrediction.digit;
-        document.getElementById("confScore").textContent = `${currentPrediction.confidence}%`;
+function updateSignal(){
+ const n=demoNumber;
+ $('number').textContent=n;
+ $('number').style.animation='none';
+ void $('number').offsetWidth;
+ $('number').style.animation='rotateIn .7s ease,numberGlow 2s infinite alternate';
+ $('color').textContent=n%2===0?'RED':'GREEN';
+ $('color').className='tag '+(n%2===0?'red':'big');
+ $('size').textContent=n>=5?'BIG':'SMALL';
+}
+updateSignal();
 
-        // Trigger smooth re-animation on update
-        display.style.animation = 'none';
-        display.offsetHeight;
-        display.style.animation = 'popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-      }
-    }
+const digits=$('digits');
+for(let i=0;i<10;i++){
+ const b=document.createElement('button');
+ b.className='digit';
+ b.textContent=i;
+ b.onclick=()=>addResult(i);
+ digits.appendChild(b);
+}
 
-    function submitActualResult(actualNum) {
-      if (!currentPrediction) return;
-
-      const isWin = (actualNum === currentPrediction.digit);
-      totalMatches++;
-      if (isWin) totalWins++;
-
-      const accuracy = Math.round((totalWins / totalMatches) * 100);
-      document.getElementById("accuracyRate").textContent = `${accuracy}%`;
-
-      const tbody = document.getElementById("historyBody");
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>#${lastPeriod.slice(-4)}</td>
-        <td>${currentPrediction.digit} (${currentPrediction.sizeText[0]})</td>
-        <td><strong>${actualNum}</strong> (${actualNum >= 5 ? 'B' : 'S'})</td>
-        <td><span class="${isWin ? 'tag-win' : 'tag-loss'}">${isWin ? 'WIN' : 'LOSS'}</span></td>
-      `;
-
-      tbody.insertBefore(row, tbody.firstChild);
-      if (tbody.children.length > 5) tbody.removeChild(tbody.lastChild);
-    }
-
-    updateTimerAndSync();
-    setInterval(updateTimerAndSync, 1000);
-  </script>
-
+function addResult(n){
+ verified++;
+ $('count').textContent=verified;
+ const row=document.createElement('div');
+ row.className='logrow';
+ const status=n===demoNumber?'MATCH':'NO MATCH';
+ row.innerHTML=
+ '<span>'+period+'</span>'+
+ '<span>'+demoNumber+'</span>'+
+ '<span>'+n+'</span>'+
+ '<span style="color:'+(status==='MATCH'?'#30e99a':'#ff647e')+'">'+status+'</span>';
+ const history=$('history');
+ if(history.querySelector('.empty'))history.innerHTML='';
+ history.prepend(row);
+ while(history.children.length>8)history.lastElementChild.remove();
+}
+</script>
 </body>
 </html>
