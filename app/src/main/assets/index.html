@@ -1,443 +1,500 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#05030c">
-<title>Wingo Neon Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070914">
+<title>NEXUS AI - Big Small</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
- --cyan:#00d9ff;--purple:#bc39ff;--gold:#ffd23f;
- --green:#00ed65;--red:#ff344f;--bg:#05030c;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 body{
- background:radial-gradient(ellipse at top,#1c0b35,#05030c 60%,#02030a);
- color:white;font-family:Arial,sans-serif;min-height:100vh;
- padding:12px;overflow-x:hidden;position:relative;isolation:isolate;
+  min-height:100vh;
+  background:#050710;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
+  background-image:
+    radial-gradient(circle at 50% 0%,#171746 0%,transparent 42%),
+    radial-gradient(circle at 15% 85%,#071d35 0%,transparent 40%);
 }
-#starfield{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1}
-body:before{
- content:"";position:fixed;inset:-25%;z-index:-2;
- background:
- radial-gradient(ellipse at 20% 30%,#8000ff28,transparent 40%),
- radial-gradient(ellipse at 80% 65%,#00beff20,transparent 40%),
- radial-gradient(ellipse at 50% 90%,#ff00b415,transparent 40%);
- filter:blur(35px);animation:nebula 24s ease-in-out infinite alternate;
- pointer-events:none;
+.app{
+  width:100%;
+  max-width:500px;
+  margin:auto;
+  padding:18px;
+  position:relative;
 }
-@keyframes nebula{
- 0%{transform:translate(-3%,-2%) rotate(0) scale(1)}
- 50%{transform:translate(3%,2%) rotate(4deg) scale(1.06)}
- 100%{transform:translate(-2%,4%) rotate(-4deg) scale(1.12)}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  background:rgba(10,15,30,.8);
+  border:1px solid #243b66;
+  border-radius:14px;
+  box-shadow:0 0 20px #00c8ff15;
 }
-.container{max-width:600px;margin:auto;position:relative;z-index:1}
-.card{
- background:linear-gradient(145deg,#0c0f1ef2,#04060ff2);
- border:1px solid #33446c;border-radius:17px;padding:14px;margin-bottom:12px;
- backdrop-filter:blur(8px);box-shadow:0 0 12px #00d9ff14,inset 0 0 12px #bc39ff08;
-}
-.header{text-align:center;border-color:#9b00ff;padding:17px 10px;box-shadow:0 0 20px #9500ff25}
 .logo{
- font-size:clamp(38px,10vw,56px);font-weight:1000;letter-spacing:3px;
- background:linear-gradient(90deg,#fff,#00d9ff,#e5d8ff,#ffdb49);
- -webkit-background-clip:text;color:transparent;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#66eaff;
+  text-shadow:0 0 15px #00c8ff;
 }
-.subtitle{font-size:13px;font-weight:bold;letter-spacing:2px;color:var(--gold)}
-.tagline{font-size:11px;color:#d4c7ff;margin-top:9px}
-.vip{display:inline-block;margin-top:12px;padding:7px 18px;border-radius:30px;border:1px solid #b500ff;color:#e8adff;font-size:12px}
-.online{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;color:#00ff82;font-size:12px}
-.dot{width:8px;height:8px;border-radius:50%;background:#00ff66;box-shadow:0 0 10px #00ff66}
-.title{font-size:15px;font-weight:bold;margin-bottom:12px}
-.cyan{color:var(--cyan)}.purple{color:#dc72ff}.gold{color:var(--gold)}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.info-box{background:#050916;border:1px solid #284775;border-radius:13px;padding:11px}
-.label{font-size:11px;color:#9aa9c5;margin-bottom:7px}
-.value{font-size:16px;font-weight:bold;word-break:break-all}
-.clock{color:var(--cyan)}.timer{color:var(--gold)}
-.result-panel{border-color:#00cfff;box-shadow:0 0 15px #00cfff20}
-.result-grid{display:grid;grid-template-columns:1fr 125px;gap:12px;align-items:center}
-.result-color{
- text-align:center;padding:16px 5px;border-radius:14px;border:1px solid var(--cyan);
- color:var(--cyan);font-size:22px;font-weight:1000;text-shadow:0 0 12px currentColor;
+.status{
+  font-size:10px;
+  letter-spacing:1px;
+  color:#57ffb0;
 }
-.result-size{text-align:center;font-size:21px;font-weight:bold;margin-top:12px}
-.orb{
- width:118px;height:118px;border-radius:50%;margin:auto;border:3px solid var(--cyan);
- display:flex;align-items:center;justify-content:center;flex-direction:column;
- box-shadow:0 0 18px #00d9ff45,inset 0 0 15px #bc39ff22;
+.status:before{
+  content:"● ";
+  animation:blink 1s infinite;
 }
-.orb-number{font-size:48px;font-weight:1000;color:#c5ff42;text-shadow:0 0 12px #c5ff42}
-.orb-caption{font-size:10px;color:white}
-.note{text-align:center;color:#aebbd1;font-size:11px;margin-top:12px;line-height:1.5}
-.btn{
- width:100%;padding:14px;border-radius:30px;border:1px solid var(--purple);
- background:linear-gradient(90deg,#27004b,#111d48,#31004c);
- color:white;font-size:14px;font-weight:bold;margin-top:12px;cursor:pointer;
- box-shadow:0 0 12px #bc39ff25;transition:.2s;
+@keyframes blink{
+  50%{opacity:.2}
 }
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.secondary{background:#080c1a;border-color:#415678;color:#c9d7ef}
-.history-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.history-item{background:#050813;border:1px solid #2c3e68;border-radius:10px;padding:8px 2px;text-align:center}
-.history-item small{font-size:9px;color:#c3cde1}
-.ball{width:35px;height:35px;border-radius:50%;margin:7px auto;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:bold;color:white}
-.green{background:#00c93c;box-shadow:0 0 10px #00c93c40}
-.red{background:#ed2835;box-shadow:0 0 10px #ed283540}
-.violet{background:#9200f5;box-shadow:0 0 10px #9200f540}
-.hcolor{font-size:9px;font-weight:bold}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.stat{background:#050915;border:1px solid #2c3e68;border-radius:13px;padding:11px}
-.stat-name{font-size:12px;font-weight:bold}
-.stat-line{display:flex;justify-content:space-between;margin-top:10px;font-size:12px}
-.bar{height:7px;border-radius:20px;background:#1a2235;margin-top:6px;overflow:hidden}
-.fill{height:100%;border-radius:20px;transition:width .5s}
-.tips{display:grid;gap:9px}
-.tip{font-size:12px;color:#d7e1f3;line-height:1.5}
-.tip b{color:#00ff78}
-.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;position:sticky;bottom:6px;background:#04050ddf;backdrop-filter:blur(12px);border:1px solid #6a00b8;padding:7px;border-radius:17px}
-.nav-item{text-align:center;color:#a7b3cb;font-size:10px;padding:7px 1px}
-.nav-item strong{display:block;font-size:18px;margin-bottom:4px}
-.nav-item.active{color:white;background:#43006e;border-radius:11px}
-.footer{text-align:center;color:#71809c;font-size:10px;padding:15px 4px}
+.title{
+  text-align:center;
+  margin-top:24px;
+  font-size:11px;
+  letter-spacing:4px;
+  color:#8296cb;
+}
+.subtitle{
+  text-align:center;
+  margin-top:7px;
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+.subtitle span{
+  color:#00eaff;
+  text-shadow:0 0 15px #00eaff;
+}
 
-/* SCANNER (only active when button is pressed) */
-.scan-wrap{display:none;margin-top:15px}
-.scan-wrap.active{display:block}
-.scan-box{
- height:190px;border:1px solid #3d2871;border-radius:16px;
- background:radial-gradient(ellipse at center,#141031,#040611);
- position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+/* Reactor */
+.reactor{
+  height:260px;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:10px auto;
 }
-.scan-ring{
- width:125px;height:125px;border:1px solid #6328a6;border-radius:50%;
- box-shadow:0 0 15px #9900ff20,inset 0 0 15px #00d9ff10;
- position:relative;
+.core{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle,#16416a,#071226 65%);
+  border:2px solid #00eaff;
+  box-shadow:0 0 20px #00eaff, inset 0 0 25px #0077ff55;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:36px;
+  z-index:2;
+  animation:corePulse 3s infinite ease-in-out;
 }
-.scan-ring:before,.scan-ring:after{
- content:"";position:absolute;border:1px solid #38255e;border-radius:50%;
+.ring{
+  position:absolute;
+  border-radius:50%;
+  border:2px solid transparent;
 }
-.scan-ring:before{inset:18px}
-.scan-ring:after{inset:40px}
-.scan-line{
- position:absolute;top:0;left:0;width:100%;height:2px;
- background:linear-gradient(90deg,transparent,#00d9ff,#ffffff,#00d9ff,transparent);
- box-shadow:0 0 15px #00d9ff;opacity:0;
+.r1{
+  width:170px;height:170px;
+  border-top-color:#00eaff;
+  border-bottom-color:#00eaff;
+  animation:spin 4s linear infinite;
 }
-.scanning .scan-line{opacity:1;animation:scanSweep 1.5s linear infinite}
-@keyframes scanSweep{0%{top:0}100%{top:100%}}
-.scan-glow{
- position:absolute;width:90px;height:90px;border-radius:50%;
- background:#00d9ff15;filter:blur(20px);
+.r2{
+  width:205px;height:205px;
+  border-left-color:#a100ff;
+  border-right-color:#a100ff;
+  animation:spinReverse 6s linear infinite;
 }
-.scan-status{text-align:center;color:#00d9ff;font-size:12px;font-weight:bold;margin-top:12px}
-.scan-progress{height:6px;background:#1b1930;border-radius:20px;margin-top:10px;overflow:hidden}
-.scan-fill{width:0;height:100%;background:linear-gradient(90deg,#8b00ff,#00d9ff);box-shadow:0 0 12px #00d9ff;border-radius:20px}
-.scan-percent{text-align:center;font-size:12px;color:#d7c8ff;margin-top:6px}
-.lock-status{text-align:center;font-size:12px;color:#ffdb42;margin-top:12px}
-@media(max-width:370px){
- body{padding:8px}.value{font-size:14px}
- .result-grid{grid-template-columns:1fr 100px}
- .orb{width:95px;height:95px}.orb-number{font-size:40px}
- .history-grid{gap:4px}.ball{width:31px;height:31px}
+.r3{
+  width:235px;height:235px;
+  border-top-color:#2455ff;
+  border-bottom-color:#2455ff;
+  animation:spin 8s linear infinite;
 }
-@media(prefers-reduced-motion:reduce){body:before{animation:none}}
+.orbit{
+  position:absolute;
+  width:250px;
+  height:70px;
+  border:1px solid #00cfff;
+  border-radius:50%;
+  transform:rotate(-18deg);
+  box-shadow:0 0 12px #00cfff55;
+}
+.scanBeam{
+  position:absolute;
+  width:230px;
+  height:2px;
+  background:#00eaff;
+  box-shadow:0 0 15px 4px #00eaff;
+  opacity:0;
+}
+.scanning .scanBeam{
+  opacity:1;
+  animation:beamMove 1.4s ease-in-out infinite alternate;
+}
+@keyframes beamMove{
+  from{transform:translateY(-95px)}
+  to{transform:translateY(95px)}
+}
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+@keyframes spinReverse{
+  to{transform:rotate(-360deg)}
+}
+@keyframes corePulse{
+  50%{box-shadow:0 0 40px #00eaff,inset 0 0 35px #0077ff88}
+}
+
+/* Analysis panel */
+.panel{
+  background:linear-gradient(145deg,#10172b,#080d1a);
+  border:1px solid #263b68;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 0 20px #001e4455;
+}
+.panelTitle{
+  font-size:11px;
+  color:#8ba9d7;
+  letter-spacing:2px;
+  margin-bottom:16px;
+  text-align:center;
+}
+.cards{
+  display:flex;
+  gap:12px;
+}
+.card{
+  flex:1;
+  min-height:130px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  border-radius:14px;
+  position:relative;
+  overflow:hidden;
+  transition:.35s;
+}
+.big{
+  border:1px solid #ffb52e;
+  background:linear-gradient(145deg,#38240b,#120d09);
+  color:#ffbf45;
+}
+.small{
+  border:1px solid #00dfff;
+  background:linear-gradient(145deg,#082b41,#07111e);
+  color:#36e7ff;
+}
+.cardLabel{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  z-index:1;
+}
+.cardSub{
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:10px;
+  opacity:.7;
+  z-index:1;
+}
+.big.active{
+  animation:bigGlow 1.2s infinite alternate;
+}
+.small.active{
+  animation:smallGlow 1.2s infinite alternate;
+}
+@keyframes bigGlow{
+  from{box-shadow:0 0 5px #ffae2255}
+  to{box-shadow:0 0 24px #ffae22aa}
+}
+@keyframes smallGlow{
+  from{box-shadow:0 0 5px #00dfff55}
+  to{box-shadow:0 0 24px #00dfffaa}
+}
+
+/* Scan progress */
+.scanInfo{
+  margin-top:20px;
+  text-align:center;
+}
+.scanText{
+  font-size:11px;
+  letter-spacing:2px;
+  color:#5feaff;
+  min-height:17px;
+}
+.progress{
+  width:100%;
+  height:7px;
+  background:#111b30;
+  border-radius:20px;
+  margin-top:12px;
+  overflow:hidden;
+  border:1px solid #23375d;
+}
+.progressFill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#006aff,#00f5ff,#b400ff);
+  box-shadow:0 0 12px #00eaff;
+  transition:width .12s linear;
+}
+.percent{
+  font-size:10px;
+  color:#829bc7;
+  margin-top:7px;
+}
+
+/* Button */
+.btn{
+  width:100%;
+  margin-top:18px;
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  background:linear-gradient(90deg,#064cff,#00bfff);
+  color:white;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:2px;
+  box-shadow:0 0 18px #006eff66;
+  cursor:pointer;
+  transition:.2s;
+}
+.btn:active{
+  transform:scale(.97);
+}
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.reset{
+  background:linear-gradient(90deg,#25144c,#5416a6);
+  box-shadow:0 0 18px #8b00ff33;
+}
+
+/* Footer */
+.footer{
+  margin-top:16px;
+  padding:14px;
+  text-align:center;
+  border:1px solid #1b2946;
+  border-radius:12px;
+  color:#64789e;
+  font-size:10px;
+  letter-spacing:1px;
+  background:#090e1a;
+}
+.disclaimer{
+  margin-top:12px;
+  text-align:center;
+  font-size:10px;
+  color:#7785a1;
+  line-height:1.6;
+}
+
+/* Stars */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background-image:
+    radial-gradient(1px 1px at 15% 15%,#fff,transparent),
+    radial-gradient(1px 1px at 85% 30%,#00eaff,transparent),
+    radial-gradient(1px 1px at 60% 80%,#fff,transparent),
+    radial-gradient(2px 2px at 35% 55%,#8855ff,transparent),
+    radial-gradient(1px 1px at 90% 90%,#fff,transparent);
+  background-size:220px 220px;
+  animation:starMove 30s linear infinite;
+}
+@keyframes starMove{
+  to{background-position:220px 220px}
+}
 </style>
 </head>
 
 <body>
-<canvas id="starfield"></canvas>
-<div class="container">
+<div class="stars"></div>
 
-<header class="card header">
- <div style="font-size:28px">👑</div>
- <div class="logo">WINGO</div>
- <div class="subtitle">1 MINUTE DASHBOARD</div>
- <div class="tagline">✦ LIVE CLOCK • DEMO MODE • SAMPLE HISTORY ✦</div>
- <div class="vip">✧ VIP S_GOD EDITION ✧</div>
- <div class="online"><span class="dot"></span> SYSTEM ONLINE</div>
-</header>
+<div class="app">
 
-<section class="card">
- <div class="info-grid">
-  <div class="info-box"><div class="label">▥ CURRENT PERIOD</div><div class="value" id="period">---</div></div>
-  <div class="info-box"><div class="label">◷ LIVE TIME</div><div class="value clock" id="clock">--:--:--</div></div>
-  <div class="info-box"><div class="label">◈ NEXT MINUTE</div><div class="value timer" id="timer">00:00</div></div>
-  <div class="info-box"><div class="label">✦ MODE</div><div class="value purple">DEMO / SIM</div></div>
- </div>
-</section>
-
-<section class="card result-panel">
- <div class="title">🎯 Locked Demo Sample</div>
- <div class="result-grid">
-  <div>
-   <div class="result-color" id="resultColor">LOCKED</div>
-   <div class="result-size" id="resultSize">--</div>
+  <div class="topbar">
+    <div class="logo">NEXUS AI</div>
+    <div class="status">SYSTEM ONLINE</div>
   </div>
-  <div class="orb">
-   <span class="orb-number" id="resultNumber">?</span>
-   <span class="orb-caption">SAMPLE NUMBER</span>
+
+  <div class="title">NEURAL INTERFACE</div>
+  <div class="subtitle">BIG <span>/</span> SMALL</div>
+
+  <div class="reactor" id="reactor">
+    <div class="orbit"></div>
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="core" id="core">✦</div>
+    <div class="scanBeam"></div>
   </div>
- </div>
- <div class="lock-status" id="lockStatus">🔒 Waiting — no scan started</div>
- <div class="note" id="demoText">Sample stays unchanged until you start a scan.</div>
 
- <!-- Scan animation is initially inactive -->
- <div class="scan-wrap" id="scanWrap">
-  <div class="scan-box" id="scanBox">
-   <div class="scan-glow"></div>
-   <div class="scan-ring"></div>
-   <div class="scan-line"></div>
+  <div class="panel">
+    <div class="panelTitle">BIG / SMALL VISUAL ANALYSIS</div>
+
+    <div class="cards">
+      <div class="card big" id="bigCard">
+        <div class="cardLabel">BIG</div>
+        <div class="cardSub">VISUAL MODE A</div>
+      </div>
+
+      <div class="card small" id="smallCard">
+        <div class="cardLabel">SMALL</div>
+        <div class="cardSub">VISUAL MODE B</div>
+      </div>
+    </div>
+
+    <div class="scanInfo">
+      <div class="scanText" id="scanText">SYSTEM IDLE — READY TO SCAN</div>
+      <div class="progress">
+        <div class="progressFill" id="progressFill"></div>
+      </div>
+      <div class="percent" id="percent">0%</div>
+    </div>
+
+    <button class="btn" id="scanButton" onclick="startScan()">
+      ▶ START SCAN
+    </button>
+
+    <button class="btn reset" id="resetButton" onclick="resetScan()" style="display:none">
+      ↻ RESET SYSTEM
+    </button>
   </div>
-  <div class="scan-status" id="scanStatus">INITIALIZING</div>
-  <div class="scan-progress"><div class="scan-fill" id="scanFill"></div></div>
-  <div class="scan-percent" id="scanPercent">0%</div>
- </div>
 
- <button class="btn" id="scanButton" onclick="startScan()">✦ START SCAN ✦</button>
- <button class="btn secondary" id="resetButton" onclick="resetDemo()" style="display:none">↻ RESET / NEW SAMPLE</button>
-</section>
+  <div class="footer" id="footerText">
+    NEXUS CORE · VISUAL SIMULATION
+  </div>
 
-<section class="card">
- <div class="title purple">◷ Recent Demo History</div>
- <div class="history-grid" id="history"></div>
-</section>
+  <div class="disclaimer">
+    VISUAL DEMO ONLY · NO REAL PREDICTIONS · NO GAME SIGNALS
+  </div>
 
-<section class="card">
- <div class="title cyan">▥ Sample Distribution</div>
- <div class="stats-grid">
-  <div class="stat"><div class="stat-name" style="color:#00ff67">● GREEN</div><div class="stat-line"><span>Samples</span><b id="greenCount">0</b></div><div class="bar"><div class="fill" id="greenBar" style="background:#00ff67"></div></div></div>
-  <div class="stat"><div class="stat-name" style="color:#ff3848">● RED</div><div class="stat-line"><span>Samples</span><b id="redCount">0</b></div><div class="bar"><div class="fill" id="redBar" style="background:#ff3848"></div></div></div>
-  <div class="stat"><div class="stat-name" style="color:#c300ff">● VIOLET</div><div class="stat-line"><span>Samples</span><b id="violetCount">0</b></div><div class="bar"><div class="fill" id="violetBar" style="background:#c300ff"></div></div></div>
-  <div class="stat"><div class="stat-name" style="color:#00baff">◆ SIZE SPLIT</div><div class="stat-line"><span>Big / Small</span><b id="sizeCount">0 / 0</b></div><div class="bar"><div class="fill" id="sizeBar" style="background:#00baff"></div></div></div>
- </div>
-</section>
-
-<section class="card">
- <div class="title gold">✧ Dashboard Info</div>
- <div class="tips">
-  <div class="tip">✦ <b>Clock:</b> follows your device time.</div>
-  <div class="tip">✦ <b>Period:</b> updates each minute.</div>
-  <div class="tip">✦ <b>Scan:</b> animation starts only when you tap Scan.</div>
-  <div class="tip">✦ <b>Lock:</b> sample is frozen until Reset.</div>
-  <div class="tip">✦ <b>Note:</b> this simulation cannot predict actual outcomes.</div>
- </div>
-</section>
-
-<nav class="nav">
- <div class="nav-item active"><strong>⌂</strong>Home</div>
- <div class="nav-item"><strong>▥</strong>Stats</div>
- <div class="nav-item" onclick="startScan()"><strong>✦</strong>Scan</div>
- <div class="nav-item"><strong>◷</strong>History</div>
-</nav>
-<footer class="footer">WINGO • NEON DEMO UI • SIMULATION ONLY</footer>
 </div>
 
 <script>
-// CLOCK: changes only time and period, never changes locked sample
-function updateClock(){
- const now=new Date();
- document.getElementById("clock").textContent=now.toLocaleTimeString("en-IN",{hour12:false});
- document.getElementById("timer").textContent="00:"+String(59-now.getSeconds()).padStart(2,"0");
- const date=now.getFullYear()+String(now.getMonth()+1).padStart(2,"0")+String(now.getDate()).padStart(2,"0");
- const mins=now.getHours()*60+now.getMinutes();
- document.getElementById("period").textContent=date+String(mins).padStart(4,"0");
-}
-updateClock();
-setInterval(updateClock,1000);
+const reactor = document.getElementById("reactor");
+const core = document.getElementById("core");
+const bigCard = document.getElementById("bigCard");
+const smallCard = document.getElementById("smallCard");
+const scanText = document.getElementById("scanText");
+const progressFill = document.getElementById("progressFill");
+const percent = document.getElementById("percent");
+const scanButton = document.getElementById("scanButton");
+const resetButton = document.getElementById("resetButton");
+const footerText = document.getElementById("footerText");
 
-// HISTORY
-let demoHistory=[
- {n:7,c:"Green"},{n:2,c:"Red"},{n:0,c:"Violet"},
- {n:4,c:"Red"},{n:9,c:"Green"},{n:3,c:"Red"},
- {n:5,c:"Violet"},{n:8,c:"Green"},{n:1,c:"Red"},{n:6,c:"Green"}
+let running = false;
+let interval = null;
+let progress = 0;
+
+const stages = [
+  {at:0, text:"INITIALIZING NEURAL CORE..."},
+  {at:20, text:"LOADING VISUAL MODULES..."},
+  {at:45, text:"SCANNING INTERFACE..."},
+  {at:70, text:"PROCESSING ANIMATION..."},
+  {at:90, text:"FINALIZING VISUALS..."}
 ];
 
-function renderHistory(){
- document.getElementById("history").innerHTML=demoHistory.map((item,i)=>`
-  <div class="history-item">
-   <small>#${demoHistory.length-i}</small>
-   <div class="ball ${item.c.toLowerCase()}">${item.n}</div>
-   <div class="hcolor" style="color:${item.c==="Green"?"#00ff67":item.c==="Red"?"#ff3848":"#c300ff"}">${item.c}</div>
-  </div>`).join("");
-}
-renderHistory();
-
-function updateStats(){
- const total=demoHistory.length||1;
- let g=0,r=0,v=0,b=0,s=0;
- demoHistory.forEach(x=>{
-  if(x.c==="Green")g++;else if(x.c==="Red")r++;else v++;
-  if(x.n>=5)b++;else s++;
- });
- document.getElementById("greenCount").textContent=g;
- document.getElementById("redCount").textContent=r;
- document.getElementById("violetCount").textContent=v;
- document.getElementById("sizeCount").textContent=b+" / "+s;
- document.getElementById("greenBar").style.width=g/total*100+"%";
- document.getElementById("redBar").style.width=r/total*100+"%";
- document.getElementById("violetBar").style.width=v/total*100+"%";
- document.getElementById("sizeBar").style.width=b/total*100+"%";
-}
-updateStats();
-
-// Scan controls: no animation runs before tapping Start Scan
-let scanRunning=false;
-let scanDone=false;
-let scanInterval=null;
-
 function startScan(){
- if(scanRunning||scanDone)return;
- scanRunning=true;
- const wrap=document.getElementById("scanWrap");
- const box=document.getElementById("scanBox");
- const btn=document.getElementById("scanButton");
- wrap.classList.add("active");
- box.classList.add("scanning");
- btn.disabled=true;
- btn.textContent="◌ SCANNING...";
- document.getElementById("lockStatus").textContent="◌ DEMO SCAN RUNNING";
- document.getElementById("demoText").textContent="Visual simulation running...";
+  if(running) return;
 
- let progress=0;
- const fill=document.getElementById("scanFill");
- const pct=document.getElementById("scanPercent");
- const status=document.getElementById("scanStatus");
- const stages=["INITIALIZING","LOADING DEMO","ANIMATING","FINISHING"];
- scanInterval=setInterval(()=>{
-  progress+=2;
-  if(progress>100)progress=100;
-  fill.style.width=progress+"%";
-  pct.textContent=progress+"%";
-  status.textContent=stages[Math.min(3,Math.floor(progress/26))];
-  if(progress>=100){
-   clearInterval(scanInterval);
-   scanInterval=null;
-   box.classList.remove("scanning");
-   scanRunning=false;
-   scanDone=true;
-   finishDemo();
-  }
- },60);
+  running = true;
+  progress = 0;
+
+  scanButton.disabled = true;
+  scanButton.textContent = "⟳ SCANNING...";
+  resetButton.style.display = "none";
+
+  reactor.classList.add("scanning");
+  bigCard.classList.add("active");
+  smallCard.classList.add("active");
+
+  core.textContent = "⌘";
+  footerText.textContent = "NEURAL CORE · ANIMATION RUNNING";
+
+  interval = setInterval(()=>{
+    progress += 1;
+
+    progressFill.style.width = progress + "%";
+    percent.textContent = progress + "%";
+
+    for(let i = stages.length-1; i>=0; i--){
+      if(progress >= stages[i].at){
+        scanText.textContent = stages[i].text;
+        break;
+      }
+    }
+
+    if(progress >= 100){
+      finishScan();
+    }
+  },45);
 }
 
-// Lock a single random simulation sample until reset
-function finishDemo(){
- const n=Math.floor(Math.random()*10);
- let c="Red";
- if(n===0||n===5)c="Violet";
- else if([1,3,7,9].includes(n))c="Green";
- else c="Red";
- const size=n>=5?"BIG":"SMALL";
+function finishScan(){
+  clearInterval(interval);
+  running = false;
 
- const result=document.getElementById("resultColor");
- result.textContent=c.toUpperCase();
- result.style.color=c==="Green"?"#00ff67":c==="Red"?"#ff3848":"#c300ff";
- result.style.borderColor=result.style.color;
- result.style.boxShadow="0 0 15px "+result.style.color+"35";
+  reactor.classList.remove("scanning");
+  bigCard.classList.remove("active");
+  smallCard.classList.remove("active");
 
- document.getElementById("resultSize").textContent=size;
- document.getElementById("resultNumber").textContent=n;
- document.getElementById("lockStatus").textContent="🔒 DEMO SAMPLE LOCKED";
- document.getElementById("demoText").textContent="Locked sample — reset manually to run another simulation.";
+  core.textContent = "✓";
+  scanText.textContent = "VISUAL SIMULATION COMPLETE";
+  percent.textContent = "100% — COMPLETE";
 
- demoHistory.unshift({n,c});
- if(demoHistory.length>10)demoHistory.pop();
- renderHistory();
- updateStats();
+  scanButton.disabled = false;
+  scanButton.style.display = "none";
+  resetButton.style.display = "block";
 
- document.getElementById("scanStatus").textContent="DEMO COMPLETE";
- document.getElementById("scanButton").style.display="none";
- document.getElementById("resetButton").style.display="block";
+  footerText.textContent = "NEXUS CORE · SIMULATION COMPLETE";
 }
 
-// Reset sample manually; scanning remains stopped until tapped again
-function resetDemo(){
- if(scanInterval){clearInterval(scanInterval);scanInterval=null}
- scanRunning=false;
- scanDone=false;
+function resetScan(){
+  clearInterval(interval);
+  running = false;
+  progress = 0;
 
- document.getElementById("scanWrap").classList.remove("active");
- document.getElementById("scanBox").classList.remove("scanning");
- document.getElementById("scanFill").style.width="0%";
- document.getElementById("scanPercent").textContent="0%";
- document.getElementById("scanStatus").textContent="INITIALIZING";
+  reactor.classList.remove("scanning");
+  bigCard.classList.remove("active");
+  smallCard.classList.remove("active");
 
- const result=document.getElementById("resultColor");
- result.textContent="READY";
- result.style.color="#00d9ff";
- result.style.borderColor="#00d9ff";
- result.style.boxShadow="none";
- document.getElementById("resultSize").textContent="--";
- document.getElementById("resultNumber").textContent="?";
- document.getElementById("lockStatus").textContent="🔒 WAITING — NO SCAN STARTED";
- document.getElementById("demoText").textContent="Sample stays unchanged until you start a scan.";
+  progressFill.style.width = "0%";
+  percent.textContent = "0%";
+  scanText.textContent = "SYSTEM IDLE — READY TO SCAN";
 
- document.getElementById("scanButton").style.display="block";
- document.getElementById("scanButton").disabled=false;
- document.getElementById("scanButton").textContent="✦ START SCAN ✦";
- document.getElementById("resetButton").style.display="none";
+  core.textContent = "✦";
+
+  scanButton.disabled = false;
+  scanButton.style.display = "block";
+  scanButton.textContent = "▶ START SCAN";
+
+  resetButton.style.display = "none";
+  footerText.textContent = "NEXUS CORE · VISUAL SIMULATION";
 }
-
-// Animated starfield background
-(function(){
- const canvas=document.getElementById("starfield");
- const ctx=canvas.getContext("2d");
- let w,h,stars=[],shooters=[],last=0;
- const COUNT=100;
-
- function resize(){
-  w=innerWidth;h=innerHeight;
-  const dpr=Math.min(devicePixelRatio||1,1.5);
-  canvas.width=w*dpr;canvas.height=h*dpr;
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  stars=Array.from({length:COUNT},()=>({
-   x:Math.random()*w,y:Math.random()*h,r:.3+Math.random()*1.35,
-   speed:.018+Math.random()*.045,alpha:.2+Math.random()*.7,
-   phase:Math.random()*6.28,twinkle:.001+Math.random()*.002,
-   drift:(Math.random()-.5)*.025
-  }));
- }
- function drawStar(s,t,dt){
-  s.y-=s.speed*dt;s.x+=s.drift*dt;
-  if(s.y< -3){s.y=h+3;s.x=Math.random()*w}
-  if(s.x<0)s.x=w;if(s.x>w)s.x=0;
-  const pulse=(Math.sin(t*s.twinkle+s.phase)+1)/2;
-  const a=s.alpha*(.35+.65*pulse);
-  ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-  ctx.fillStyle=`rgba(210,230,255,${a})`;ctx.fill();
- }
- function spawn(){
-  if(Math.random()<.0015&&shooters.length<2){
-   shooters.push({x:Math.random()*w*.8,y:Math.random()*h*.4,
-    vx:.18+Math.random()*.25,vy:.12+Math.random()*.2,
-    life:1,length:45+Math.random()*65});
-  }
- }
- function drawShooters(dt){
-  shooters.forEach(s=>{
-   s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=.0012*dt;
-   const grad=ctx.createLinearGradient(s.x,s.y,s.x-s.length,s.y-s.length*.4);
-   grad.addColorStop(0,`rgba(255,255,255,${Math.max(0,s.life)})`);
-   grad.addColorStop(1,"rgba(0,200,255,0)");
-   ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x-s.length,s.y-s.length*.4);
-   ctx.strokeStyle=grad;ctx.lineWidth=1.3;ctx.stroke();
-  });
-  shooters=shooters.filter(s=>s.life>0);
- }
- function frame(t){
-  const dt=Math.min(t-last||16,40);last=t;
-  ctx.clearRect(0,0,w,h);
-  stars.forEach(s=>drawStar(s,t,dt));
-  spawn();drawShooters(dt);
-  requestAnimationFrame(frame);
- }
- addEventListener("resize",resize);
- resize();requestAnimationFrame(frame);
-})();
 </script>
+
 </body>
 </html>
