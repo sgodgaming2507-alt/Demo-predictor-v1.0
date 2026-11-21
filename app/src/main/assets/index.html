@@ -256,10 +256,12 @@ const clockEl=document.getElementById("clock");
 const countdownEl=document.getElementById("countdown");
 const periodEl=document.getElementById("period");
 
-// Anchor: 2026-11-21 16:49 IST => period 20261121100010680[span_1](start_span)[span_1](end_span)
+// Anchor from screenshot: 2026-11-21 16:49 IST => 20261121100010680[span_0](start_span)[span_0](end_span)
 const ANCHOR_DATE_KEY="20261121";
 const ANCHOR_MINUTE_OF_DAY=16*60+49; // 1009
 const ANCHOR_SEQ=10680;
+
+let lastSeenPeriod="";
 
 function getCurrentPeriodInfo(now){
  const dateStr=new Intl.DateTimeFormat("en-CA",{
@@ -297,11 +299,16 @@ function updateClock(){
  clockEl.textContent=info.timeStr;
  countdownEl.textContent="00:"+String(info.remaining).padStart(2,"0");
  periodEl.textContent=info.periodStr;
+
+ if(lastSeenPeriod && lastSeenPeriod!==info.periodStr && !running){
+  resetScan();
+ }
+ lastSeenPeriod=info.periodStr;
 }
 updateClock();
 setInterval(updateClock,250);
 
-/* Advance Multi-Factor Formula Engine */
+/* Advance Multi-Factor + Live Entropy Engine */
 const reactor=document.getElementById("reactor");
 const scanButton=document.getElementById("scanButton");
 const resetButton=document.getElementById("resetButton");
@@ -321,7 +328,7 @@ const subModeEl=document.getElementById("subMode");
 const subColorEl=document.getElementById("subColor");
 const subNumberEl=document.getElementById("subNumber");
 
-// Recent outcomes from screenshot (newest first: 6, 8, 0, 6, 6, 5)[span_2](start_span)[span_2](end_span)
+// Recent outcomes from screenshot (newest first: 6, 8, 0, 6, 6, 5)[span_1](start_span)[span_1](end_span)
 const historyData=[6,8,0,6,6,5];
 
 let running=false;
@@ -341,13 +348,13 @@ function numberToColor(n){
  return n%2===0 ? "RED" : "GREEN";
 }
 
-function periodHash(periodStr, salt){
- let h=2166136261 ^ salt;
- for(let i=0;i<periodStr.length;i++){
-  h^=periodStr.charCodeAt(i);
-  h=Math.imul(h,16777619);
+function freshRandom(){
+ if(window.crypto && window.crypto.getRandomValues){
+  const arr=new Uint32Array(1);
+  window.crypto.getRandomValues(arr);
+  return arr[0]/4294967296;
  }
- return (h>>>0)/4294967295;
+ return Math.random();
 }
 
 function advancePrediction(periodStr, seq){
@@ -357,7 +364,7 @@ function advancePrediction(periodStr, seq){
   const decay=Math.pow(0.76,i);
   if(n>=5)bigW+=decay; else smallW+=decay;
  });
- const momentumBig=bigW/(bigW+smallW); // 0..1
+ const momentumBig=bigW/(bigW+smallW);
 
  // Factor 2: Current streak fatigue & flip pressure
  const curIsBig=historyData[0]>=5;
@@ -368,7 +375,7 @@ function advancePrediction(periodStr, seq){
  }
  const streakPressure=streak>=3 ? (curIsBig ? -0.22 : 0.22) : (streak===2 ? (curIsBig ? -0.08 : 0.08) : 0.04);
 
- // Factor 3: Alternation rate (ABAB pattern strength in recent steps)
+ // Factor 3: Alternation rate
  let switches=0;
  for(let i=0;i<historyData.length-1;i++){
   if((historyData[i]>=5)!==(historyData[i+1]>=5))switches++;
@@ -376,35 +383,29 @@ function advancePrediction(periodStr, seq){
  const altRate=switches/Math.max(1,historyData.length-1);
  const altPull=altRate>0.6 ? (curIsBig ? -0.10 : 0.10) : 0;
 
- // Factor 4: Period digit parity & tail harmonic
+ // Factor 4: Period digit parity & live sequence balance
  const lastDigit=Number(periodStr.slice(-1)) || 0;
  const periodBias=(lastDigit%2===0 ? 0.03 : -0.03) + ((seq%10)>=5 ? 0.02 : -0.02);
 
- // Combine into BIG probability (clamped 0.22..0.78)
  let bigProb=momentumBig*0.45 + (0.5+streakPressure)*0.30 + (0.5+altPull)*0.15 + (0.5+periodBias)*0.10;
- bigProb=Math.min(0.78,Math.max(0.22,bigProb));
+ bigProb=Math.min(0.75,Math.max(0.25,bigProb));
 
- const u1=periodHash(periodStr,101);
- const pickBig=u1<bigProb;
+ const pickBig=freshRandom()<bigProb;
 
- // Candidate pool & multi-score ranking
  const pool=pickBig ? [5,6,7,8,9] : [0,1,2,3,4];
  const scored=pool.map(num=>{
   let score=1.0;
-  // Penalize immediate repetition, boost appearance 2-4 steps ago
   if(historyData[0]===num)score-=0.45;
   if(historyData[1]===num)score-=0.15;
-  if(historyData.slice(2,5).includes(num))score+=0.30;
-  // Period harmonic alignment
-  if((num+lastDigit)%3===0)score+=0.18;
-  // Tie-breaker using period hash
-  score+=periodHash(periodStr,500+num)*0.25;
-  return {num,score:Math.max(0.15,score)};
+  if(historyData.slice(2,5).includes(num))score+=0.25;
+  if((num+lastDigit)%3===0)score+=0.12;
+  score+=freshRandom()*0.65;
+  return {num,score:Math.max(0.2,score)};
  });
 
  const totalScore=scored.reduce((s,item)=>s+item.score,0);
- let r=periodHash(periodStr,999)*totalScore;
- let chosen=scored[0].num;
+ let r=freshRandom()*totalScore;
+ let chosen=scored[Math.floor(freshRandom()*scored.length)].num;
  for(const item of scored){
   r-=item.score;
   if(r<=0){
@@ -415,9 +416,8 @@ function advancePrediction(periodStr, seq){
 
  const size=chosen>=5 ? "BIG" : "SMALL";
  const color=numberToColor(chosen);
- const edge=Math.abs(bigProb-0.5)*200; // 0..56
+ const edge=Math.abs(bigProb-0.5)*200;
  const conf=Math.min(91,Math.max(62,Math.round(64+edge*0.42+streak*2)));
-
  const factorTag=streak>=3 ? "STREAK FLIP" : (altRate>0.6 ? "ALT MODEL" : "MULTI-SCORE");
 
  return {num:chosen,size,color,conf,factorTag};
@@ -439,7 +439,9 @@ function applyOutput(res, sub1, sub2, sub3){
 
 function startScan(){
  if(running)return;
- running=true;progress=0;
+ running=true;
+ progress=0;
+
  scanButton.disabled=true;
  scanButton.textContent="⟳ SCANNING...";
  resetButton.style.display="none";
@@ -454,8 +456,8 @@ function startScan(){
   progressFill.style.width=progress+"%";
   progressText.textContent=progress+"%";
 
-  if(progress%5===0){
-   const liveRes=advancePrediction(info.periodStr+"-"+progress, info.seq+progress);
+  if(progress%4===0){
+   const liveRes=advancePrediction(info.periodStr, info.seq+progress);
    applyOutput(liveRes,"SCANNING...","COMPUTING","SCORE");
   }
 
@@ -476,6 +478,10 @@ function finishScan(){
 
  const info=getCurrentPeriodInfo(new Date());
  const res=advancePrediction(info.periodStr, info.seq);
+
+ historyData.unshift(res.num);
+ if(historyData.length>12)historyData.pop();
+
  applyOutput(res,"CONF "+res.conf+"%",res.color,res.factorTag);
 
  scanStatus.textContent="PERIOD "+info.periodStr+" — "+res.size;
@@ -488,14 +494,14 @@ function finishScan(){
 
 function resetScan(){
  clearInterval(scanTimer);
- running=false;progress=0;
+ running=false;
+ progress=0;
  reactor.classList.remove("scanning");
  progressFill.style.width="0%";
  progressText.textContent="0%";
  scanStatus.textContent="SYSTEM IDLE — READY";
  coreStatus.textContent="PERIOD SYNC";
  lockText.textContent="PERIOD MATCHED";
- applyOutput({num:6,size:"BIG",color:"RED",conf:72,factorTag:"SCORE MODEL"},"CONF 72%","MULTI-FACTOR","SCORE MODEL");
  scanButton.disabled=false;
  scanButton.textContent="▶ START SCAN";
  scanButton.style.display="block";
