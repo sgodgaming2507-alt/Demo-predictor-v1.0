@@ -1,500 +1,235 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#070914">
-<title>NEXUS AI - Big Small</title>
-
+<title>NEXUS AI</title>
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  min-height:100vh;
-  background:#050710;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  overflow-x:hidden;
-  background-image:
-    radial-gradient(circle at 50% 0%,#171746 0%,transparent 42%),
-    radial-gradient(circle at 15% 85%,#071d35 0%,transparent 40%);
+ background:#050713;color:#fff;font-family:Arial,sans-serif;
+ min-height:100vh;overflow-x:hidden;
+ background-image:radial-gradient(ellipse at center,#121c43 0%,#050713 70%);
 }
-.app{
-  width:100%;
-  max-width:500px;
-  margin:auto;
-  padding:18px;
-  position:relative;
+.app{max-width:480px;margin:auto;padding:16px}
+.top{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:15px;border:1px solid #17426b;border-radius:14px;
+ background:#091326;box-shadow:0 0 18px #00d9ff15;
 }
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 16px;
-  background:rgba(10,15,30,.8);
-  border:1px solid #243b66;
-  border-radius:14px;
-  box-shadow:0 0 20px #00c8ff15;
-}
-.logo{
-  font-size:19px;
-  font-weight:900;
-  letter-spacing:2px;
-  color:#66eaff;
-  text-shadow:0 0 15px #00c8ff;
-}
-.status{
-  font-size:10px;
-  letter-spacing:1px;
-  color:#57ffb0;
-}
-.status:before{
-  content:"● ";
-  animation:blink 1s infinite;
-}
-@keyframes blink{
-  50%{opacity:.2}
-}
-.title{
-  text-align:center;
-  margin-top:24px;
-  font-size:11px;
-  letter-spacing:4px;
-  color:#8296cb;
-}
-.subtitle{
-  text-align:center;
-  margin-top:7px;
-  font-size:22px;
-  font-weight:bold;
-  letter-spacing:2px;
-}
-.subtitle span{
-  color:#00eaff;
-  text-shadow:0 0 15px #00eaff;
-}
+.logo{font-size:20px;font-weight:900;letter-spacing:2px;color:#00eaff}
+.online{font-size:10px;color:#47ff9a}
+.heading{text-align:center;margin-top:24px;letter-spacing:4px;color:#92a6cf;font-size:11px}
+.sub{text-align:center;margin-top:8px;font-size:23px;font-weight:bold}
+.sub span{color:#00eaff}
+.demo{text-align:center;color:#9c85ff;font-size:10px;letter-spacing:2px;margin-top:8px}
 
-/* Reactor */
+/* CIRCLE CORE */
 .reactor{
-  height:260px;
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin:10px auto;
+ height:330px;display:flex;align-items:center;justify-content:center;
+ position:relative;margin:12px 0;
 }
-.core{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:radial-gradient(circle,#16416a,#071226 65%);
-  border:2px solid #00eaff;
-  box-shadow:0 0 20px #00eaff, inset 0 0 25px #0077ff55;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:36px;
-  z-index:2;
-  animation:corePulse 3s infinite ease-in-out;
-}
-.ring{
-  position:absolute;
-  border-radius:50%;
-  border:2px solid transparent;
-}
-.r1{
-  width:170px;height:170px;
-  border-top-color:#00eaff;
-  border-bottom-color:#00eaff;
-  animation:spin 4s linear infinite;
-}
-.r2{
-  width:205px;height:205px;
-  border-left-color:#a100ff;
-  border-right-color:#a100ff;
-  animation:spinReverse 6s linear infinite;
-}
-.r3{
-  width:235px;height:235px;
-  border-top-color:#2455ff;
-  border-bottom-color:#2455ff;
-  animation:spin 8s linear infinite;
+.orbit,.ring{
+ position:absolute;border-radius:50%;pointer-events:none
 }
 .orbit{
-  position:absolute;
-  width:250px;
-  height:70px;
-  border:1px solid #00cfff;
-  border-radius:50%;
-  transform:rotate(-18deg);
-  box-shadow:0 0 12px #00cfff55;
+ width:300px;height:105px;border:1px solid #00cfff;
+ transform:rotate(-25deg);box-shadow:0 0 12px #00cfff55;
 }
-.scanBeam{
-  position:absolute;
-  width:230px;
-  height:2px;
-  background:#00eaff;
-  box-shadow:0 0 15px 4px #00eaff;
-  opacity:0;
+.orbit.two{
+ transform:rotate(35deg);border-color:#a000ff;
+ box-shadow:0 0 12px #a000ff55;
 }
-.scanning .scanBeam{
-  opacity:1;
-  animation:beamMove 1.4s ease-in-out infinite alternate;
+.ring.one{
+ width:260px;height:260px;border:2px dashed #00cfff88;
+ animation:rotate 12s linear infinite;
 }
-@keyframes beamMove{
-  from{transform:translateY(-95px)}
-  to{transform:translateY(95px)}
+.ring.two{
+ width:235px;height:235px;border:2px solid transparent;
+ border-top-color:#00eaff;border-bottom-color:#a400ff;
+ animation:rotate 5s linear infinite reverse;
 }
-@keyframes spin{
-  to{transform:rotate(360deg)}
+.ring.three{
+ width:205px;height:205px;border:1px solid #a900ff;
+ box-shadow:0 0 16px #8b00ff33,inset 0 0 15px #8b00ff22;
+ animation:rotate 8s linear infinite;
 }
-@keyframes spinReverse{
-  to{transform:rotate(-360deg)}
+.core{
+ width:178px;height:178px;border-radius:50%;
+ border:2px solid #00dfff;
+ background:radial-gradient(circle,#101e39,#050914 70%);
+ box-shadow:0 0 25px #00dfff55,inset 0 0 25px #00dfff22;
+ display:flex;align-items:center;justify-content:center;
+ flex-direction:column;z-index:2;position:relative;
 }
-@keyframes corePulse{
-  50%{box-shadow:0 0 40px #00eaff,inset 0 0 35px #0077ff88}
+.scanbeam{
+ position:absolute;width:175px;height:2px;
+ background:#00eaff;box-shadow:0 0 15px 3px #00eaff;
+ opacity:0;z-index:4;pointer-events:none
+}
+.scanning .scanbeam{opacity:1;animation:beam 1s ease-in-out infinite alternate}
+@keyframes beam{from{transform:translateY(-80px)}to{transform:translateY(80px)}}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.coretitle{font-size:9px;color:#6eeaff;letter-spacing:2px}
+.demoBig{
+ font-size:32px;font-weight:900;letter-spacing:3px;
+ margin:6px 0;text-shadow:0 0 16px currentColor;
+ color:#ffb52e;
+}
+.demoColor{font-size:13px;color:#39ff82;font-weight:bold;letter-spacing:2px}
+.demoNumber{font-size:27px;color:#bb65ff;font-weight:900;text-shadow:0 0 16px #bb65ff}
+.miniLabel{font-size:8px;color:#8097bb;letter-spacing:2px;margin-top:5px}
+.scanning .core{animation:pulse .7s infinite alternate}
+@keyframes pulse{
+ to{box-shadow:0 0 45px #00dfff,inset 0 0 35px #00dfff66}
 }
 
-/* Analysis panel */
+/* PANEL */
 .panel{
-  background:linear-gradient(145deg,#10172b,#080d1a);
-  border:1px solid #263b68;
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 0 20px #001e4455;
+ border:1px solid #1b4164;border-radius:15px;
+ padding:16px;background:linear-gradient(145deg,#10192d,#080d19);
 }
-.panelTitle{
-  font-size:11px;
-  color:#8ba9d7;
-  letter-spacing:2px;
-  margin-bottom:16px;
-  text-align:center;
+.label{text-align:center;color:#7e9ac4;font-size:10px;letter-spacing:2px}
+.statusText{text-align:center;margin-top:12px;color:#00eaff;font-size:11px}
+.bar{height:6px;background:#172238;border-radius:10px;margin-top:12px;overflow:hidden}
+.fill{
+ height:100%;width:0%;
+ background:linear-gradient(90deg,#175bff,#00eaff,#a000ff);
+ box-shadow:0 0 10px #00eaff;
 }
-.cards{
-  display:flex;
-  gap:12px;
+.percent{text-align:center;font-size:10px;color:#8295b5;margin-top:7px}
+button{
+ width:100%;padding:15px;margin-top:15px;border:0;border-radius:11px;
+ background:linear-gradient(90deg,#0757ff,#00cfff);
+ color:white;font-weight:900;letter-spacing:2px;font-size:13px;
+ box-shadow:0 0 20px #006eff44;
 }
-.card{
-  flex:1;
-  min-height:130px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  border-radius:14px;
-  position:relative;
-  overflow:hidden;
-  transition:.35s;
-}
-.big{
-  border:1px solid #ffb52e;
-  background:linear-gradient(145deg,#38240b,#120d09);
-  color:#ffbf45;
-}
-.small{
-  border:1px solid #00dfff;
-  background:linear-gradient(145deg,#082b41,#07111e);
-  color:#36e7ff;
-}
-.cardLabel{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:3px;
-  z-index:1;
-}
-.cardSub{
-  font-size:9px;
-  letter-spacing:2px;
-  margin-top:10px;
-  opacity:.7;
-  z-index:1;
-}
-.big.active{
-  animation:bigGlow 1.2s infinite alternate;
-}
-.small.active{
-  animation:smallGlow 1.2s infinite alternate;
-}
-@keyframes bigGlow{
-  from{box-shadow:0 0 5px #ffae2255}
-  to{box-shadow:0 0 24px #ffae22aa}
-}
-@keyframes smallGlow{
-  from{box-shadow:0 0 5px #00dfff55}
-  to{box-shadow:0 0 24px #00dfffaa}
-}
-
-/* Scan progress */
-.scanInfo{
-  margin-top:20px;
-  text-align:center;
-}
-.scanText{
-  font-size:11px;
-  letter-spacing:2px;
-  color:#5feaff;
-  min-height:17px;
-}
-.progress{
-  width:100%;
-  height:7px;
-  background:#111b30;
-  border-radius:20px;
-  margin-top:12px;
-  overflow:hidden;
-  border:1px solid #23375d;
-}
-.progressFill{
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,#006aff,#00f5ff,#b400ff);
-  box-shadow:0 0 12px #00eaff;
-  transition:width .12s linear;
-}
-.percent{
-  font-size:10px;
-  color:#829bc7;
-  margin-top:7px;
-}
-
-/* Button */
-.btn{
-  width:100%;
-  margin-top:18px;
-  border:none;
-  border-radius:12px;
-  padding:16px;
-  background:linear-gradient(90deg,#064cff,#00bfff);
-  color:white;
-  font-size:14px;
-  font-weight:900;
-  letter-spacing:2px;
-  box-shadow:0 0 18px #006eff66;
-  cursor:pointer;
-  transition:.2s;
-}
-.btn:active{
-  transform:scale(.97);
-}
-.btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-.reset{
-  background:linear-gradient(90deg,#25144c,#5416a6);
-  box-shadow:0 0 18px #8b00ff33;
-}
-
-/* Footer */
+button:disabled{opacity:.5}
+.reset{background:linear-gradient(90deg,#5015ad,#a000ff)}
 .footer{
-  margin-top:16px;
-  padding:14px;
-  text-align:center;
-  border:1px solid #1b2946;
-  border-radius:12px;
-  color:#64789e;
-  font-size:10px;
-  letter-spacing:1px;
-  background:#090e1a;
+ margin-top:15px;text-align:center;padding:14px;border:1px solid #192a46;
+ border-radius:12px;color:#8293b5;font-size:10px;letter-spacing:1px;
 }
-.disclaimer{
-  margin-top:12px;
-  text-align:center;
-  font-size:10px;
-  color:#7785a1;
-  line-height:1.6;
-}
-
-/* Stars */
-.stars{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
-  background-image:
-    radial-gradient(1px 1px at 15% 15%,#fff,transparent),
-    radial-gradient(1px 1px at 85% 30%,#00eaff,transparent),
-    radial-gradient(1px 1px at 60% 80%,#fff,transparent),
-    radial-gradient(2px 2px at 35% 55%,#8855ff,transparent),
-    radial-gradient(1px 1px at 90% 90%,#fff,transparent);
-  background-size:220px 220px;
-  animation:starMove 30s linear infinite;
-}
-@keyframes starMove{
-  to{background-position:220px 220px}
-}
+.note{text-align:center;color:#667997;font-size:9px;line-height:1.6;margin-top:12px}
 </style>
 </head>
-
 <body>
-<div class="stars"></div>
-
 <div class="app">
 
-  <div class="topbar">
-    <div class="logo">NEXUS AI</div>
-    <div class="status">SYSTEM ONLINE</div>
-  </div>
+<div class="top">
+ <div class="logo">NEXUS AI</div>
+ <div class="online">● SYSTEM ONLINE</div>
+</div>
 
-  <div class="title">NEURAL INTERFACE</div>
-  <div class="subtitle">BIG <span>/</span> SMALL</div>
+<div class="heading">NEURAL INTERFACE</div>
+<div class="sub">BIG <span>/</span> SMALL</div>
+<div class="demo">VISUAL SIMULATION</div>
 
-  <div class="reactor" id="reactor">
-    <div class="orbit"></div>
-    <div class="ring r1"></div>
-    <div class="ring r2"></div>
-    <div class="ring r3"></div>
-    <div class="core" id="core">✦</div>
-    <div class="scanBeam"></div>
-  </div>
+<!-- SAME CIRCULAR DESIGN -->
+<div class="reactor" id="reactor">
+ <div class="orbit"></div>
+ <div class="orbit two"></div>
+ <div class="ring one"></div>
+ <div class="ring two"></div>
+ <div class="ring three"></div>
 
-  <div class="panel">
-    <div class="panelTitle">BIG / SMALL VISUAL ANALYSIS</div>
+ <div class="core" id="core">
+  <div class="coretitle">DEMO SAMPLE</div>
+  <div class="demoBig" id="bigSmall">BIG</div>
+  <div class="demoColor" id="color">GREEN</div>
+  <div class="miniLabel">NUMBER</div>
+  <div class="demoNumber" id="number">7</div>
+ </div>
+ <div class="scanbeam"></div>
+</div>
 
-    <div class="cards">
-      <div class="card big" id="bigCard">
-        <div class="cardLabel">BIG</div>
-        <div class="cardSub">VISUAL MODE A</div>
-      </div>
+<div class="panel">
+ <div class="label">NEXUS VISUAL ENGINE</div>
+ <div class="statusText" id="status">SYSTEM IDLE</div>
+ <div class="bar"><div class="fill" id="fill"></div></div>
+ <div class="percent" id="percent">READY</div>
+ <button id="scanBtn" onclick="startScan()">▶ START SCAN</button>
+ <button class="reset" id="resetBtn" onclick="resetScan()" style="display:none">↻ RESET</button>
+</div>
 
-      <div class="card small" id="smallCard">
-        <div class="cardLabel">SMALL</div>
-        <div class="cardSub">VISUAL MODE B</div>
-      </div>
-    </div>
-
-    <div class="scanInfo">
-      <div class="scanText" id="scanText">SYSTEM IDLE — READY TO SCAN</div>
-      <div class="progress">
-        <div class="progressFill" id="progressFill"></div>
-      </div>
-      <div class="percent" id="percent">0%</div>
-    </div>
-
-    <button class="btn" id="scanButton" onclick="startScan()">
-      ▶ START SCAN
-    </button>
-
-    <button class="btn reset" id="resetButton" onclick="resetScan()" style="display:none">
-      ↻ RESET SYSTEM
-    </button>
-  </div>
-
-  <div class="footer" id="footerText">
-    NEXUS CORE · VISUAL SIMULATION
-  </div>
-
-  <div class="disclaimer">
-    VISUAL DEMO ONLY · NO REAL PREDICTIONS · NO GAME SIGNALS
-  </div>
-
+<div class="footer" id="footer">
+NEXUS CORE · DEMO MODE
+</div>
+<div class="note">
+VISUAL SIMULATION ONLY · SAMPLE VALUES ARE FIXED<br>
+NOT A REAL GAME PREDICTION
+</div>
 </div>
 
 <script>
-const reactor = document.getElementById("reactor");
-const core = document.getElementById("core");
-const bigCard = document.getElementById("bigCard");
-const smallCard = document.getElementById("smallCard");
-const scanText = document.getElementById("scanText");
-const progressFill = document.getElementById("progressFill");
-const percent = document.getElementById("percent");
-const scanButton = document.getElementById("scanButton");
-const resetButton = document.getElementById("resetButton");
-const footerText = document.getElementById("footerText");
+const reactor=document.getElementById("reactor");
+const status=document.getElementById("status");
+const fill=document.getElementById("fill");
+const percent=document.getElementById("percent");
+const scanBtn=document.getElementById("scanBtn");
+const resetBtn=document.getElementById("resetBtn");
+const footer=document.getElementById("footer");
 
-let running = false;
-let interval = null;
-let progress = 0;
+let running=false;
+let progress=0;
+let timer=null;
 
-const stages = [
-  {at:0, text:"INITIALIZING NEURAL CORE..."},
-  {at:20, text:"LOADING VISUAL MODULES..."},
-  {at:45, text:"SCANNING INTERFACE..."},
-  {at:70, text:"PROCESSING ANIMATION..."},
-  {at:90, text:"FINALIZING VISUALS..."}
+const messages=[
+ "INITIALIZING CORE...",
+ "LOADING NEURAL UI...",
+ "RUNNING VISUAL SCAN...",
+ "PROCESSING DEMO...",
+ "SCAN COMPLETE"
 ];
 
 function startScan(){
-  if(running) return;
+ if(running)return;
+ running=true;
+ progress=0;
+ scanBtn.disabled=true;
+ scanBtn.innerText="⟳ SCANNING...";
+ reactor.classList.add("scanning");
+ footer.innerText="NEXUS CORE · ANIMATION ACTIVE";
 
-  running = true;
-  progress = 0;
+ timer=setInterval(()=>{
+  progress+=2;
+  if(progress>100)progress=100;
+  fill.style.width=progress+"%";
+  percent.innerText=progress+"%";
 
-  scanButton.disabled = true;
-  scanButton.textContent = "⟳ SCANNING...";
-  resetButton.style.display = "none";
+  let index=Math.min(4,Math.floor(progress/25));
+  status.innerText=messages[index];
 
-  reactor.classList.add("scanning");
-  bigCard.classList.add("active");
-  smallCard.classList.add("active");
-
-  core.textContent = "⌘";
-  footerText.textContent = "NEURAL CORE · ANIMATION RUNNING";
-
-  interval = setInterval(()=>{
-    progress += 1;
-
-    progressFill.style.width = progress + "%";
-    percent.textContent = progress + "%";
-
-    for(let i = stages.length-1; i>=0; i--){
-      if(progress >= stages[i].at){
-        scanText.textContent = stages[i].text;
-        break;
-      }
-    }
-
-    if(progress >= 100){
-      finishScan();
-    }
-  },45);
+  if(progress>=100)finish();
+ },50);
 }
 
-function finishScan(){
-  clearInterval(interval);
-  running = false;
-
-  reactor.classList.remove("scanning");
-  bigCard.classList.remove("active");
-  smallCard.classList.remove("active");
-
-  core.textContent = "✓";
-  scanText.textContent = "VISUAL SIMULATION COMPLETE";
-  percent.textContent = "100% — COMPLETE";
-
-  scanButton.disabled = false;
-  scanButton.style.display = "none";
-  resetButton.style.display = "block";
-
-  footerText.textContent = "NEXUS CORE · SIMULATION COMPLETE";
+function finish(){
+ clearInterval(timer);
+ running=false;
+ reactor.classList.remove("scanning");
+ status.innerText="DEMO ANIMATION COMPLETE";
+ percent.innerText="100% · COMPLETE";
+ scanBtn.style.display="none";
+ resetBtn.style.display="block";
+ footer.innerText="NEXUS CORE · DEMO FINISHED";
 }
 
 function resetScan(){
-  clearInterval(interval);
-  running = false;
-  progress = 0;
-
-  reactor.classList.remove("scanning");
-  bigCard.classList.remove("active");
-  smallCard.classList.remove("active");
-
-  progressFill.style.width = "0%";
-  percent.textContent = "0%";
-  scanText.textContent = "SYSTEM IDLE — READY TO SCAN";
-
-  core.textContent = "✦";
-
-  scanButton.disabled = false;
-  scanButton.style.display = "block";
-  scanButton.textContent = "▶ START SCAN";
-
-  resetButton.style.display = "none";
-  footerText.textContent = "NEXUS CORE · VISUAL SIMULATION";
+ clearInterval(timer);
+ running=false;
+ progress=0;
+ reactor.classList.remove("scanning");
+ fill.style.width="0%";
+ percent.innerText="READY";
+ status.innerText="SYSTEM IDLE";
+ scanBtn.disabled=false;
+ scanBtn.innerText="▶ START SCAN";
+ scanBtn.style.display="block";
+ resetBtn.style.display="none";
+ footer.innerText="NEXUS CORE · DEMO MODE";
 }
 </script>
-
 </body>
 </html>
