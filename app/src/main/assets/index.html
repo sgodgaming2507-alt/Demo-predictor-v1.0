@@ -1,318 +1,426 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WinGo Pro Predictor</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05030c">
+<title>Wingo Neon Dashboard</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
- --blue:#35caff;
- --purple:#9b65ff;
- --red:#ff416b;
- --green:#30e99a;
- --bg:#050914;
+ --bg:#05030c;--card:#0a0c19;--cyan:#00d9ff;--purple:#bc39ff;
+ --gold:#ffd23f;--green:#00ed65;--red:#ff344f;--muted:#a4aec8;
 }
+html{scroll-behavior:smooth}
 body{
- background:var(--bg);
- color:#fff;
- font-family:Arial,sans-serif;
- min-height:100vh;
- overflow-x:hidden;
- padding:20px 14px 40px;
+ background:radial-gradient(ellipse at 50% 0%,#1c0b35 0%,#080611 48%,#02030a 100%);
+ color:white;font-family:Arial,Helvetica,sans-serif;min-height:100vh;
+ padding:12px;overflow-x:hidden;position:relative;isolation:isolate;
 }
-body:before{
- content:"";
- position:fixed;inset:0;z-index:-2;
+#starfield{
+ position:fixed;inset:0;width:100%;height:100%;
+ z-index:-1;pointer-events:none;opacity:.86
+}
+body::before{
+ content:"";position:fixed;inset:-25%;z-index:-2;pointer-events:none;
  background:
- radial-gradient(ellipse at 20% 10%,#182c55 0%,transparent 45%),
- radial-gradient(ellipse at 90% 50%,#241344 0%,transparent 40%),
- #050914;
+ radial-gradient(ellipse at 20% 28%,rgba(128,0,255,.20),transparent 38%),
+ radial-gradient(ellipse at 80% 62%,rgba(0,190,255,.14),transparent 40%),
+ radial-gradient(ellipse at 55% 90%,rgba(255,0,180,.12),transparent 40%);
+ filter:blur(32px);animation:nebula 24s ease-in-out infinite alternate
 }
-#particles{
- position:fixed;inset:0;z-index:-1;
- pointer-events:none;
+@keyframes nebula{
+ 0%{transform:translate(-3%,-2%) rotate(0) scale(1)}
+ 50%{transform:translate(3%,2%) rotate(4deg) scale(1.06)}
+ 100%{transform:translate(-2%,4%) rotate(-4deg) scale(1.12)}
 }
-.particle{
- position:absolute;width:3px;height:3px;
- background:#48cfff;border-radius:50%;
- box-shadow:0 0 12px #35caff;
- animation:float linear infinite;
-}
-@keyframes float{
- from{transform:translateY(105vh);opacity:0}
- 20%{opacity:.8}
- to{transform:translateY(-10vh);opacity:0}
-}
-.container{max-width:480px;margin:auto}
-.header{
- margin-top:100px;
- padding:22px 10px;
- text-align:center;
- border:1px solid #263e61;
- border-radius:22px;
- background:linear-gradient(135deg,#131e32,#101426);
- box-shadow:0 0 30px #2775ff16,inset 0 0 20px #ffffff05;
- animation:entrance .8s ease;
-}
-.logo{
- font-size:22px;font-weight:900;
- background:linear-gradient(90deg,#36d8ff,#a18aff,#36d8ff);
- background-size:200%;
- color:transparent;
- background-clip:text;
- animation:shine 3s linear infinite;
-}
-@keyframes shine{to{background-position:200%}}
-.sub{color:#8594b0;font-size:11px;letter-spacing:3px;margin-top:7px}
+.container{max-width:600px;margin:auto;position:relative;z-index:1}
 .card{
- margin-top:16px;
- padding:20px;
- border-radius:23px;
- background:linear-gradient(145deg,#141f32,#101525);
- border:1px solid #273c5b;
- box-shadow:0 10px 35px #0005,inset 0 0 20px #ffffff04;
- position:relative;overflow:hidden;
- animation:entrance .8s ease both;
+ background:linear-gradient(145deg,rgba(12,15,30,.94),rgba(4,6,15,.95));
+ backdrop-filter:blur(8px);border:1px solid #33446c;
+ border-radius:17px;padding:14px;margin-bottom:12px;
+ box-shadow:0 0 12px rgba(0,217,255,.12),inset 0 0 12px rgba(188,57,255,.04);
 }
-.card:before{
- content:"";position:absolute;
- top:0;left:-100%;width:70%;height:1px;
- background:linear-gradient(90deg,transparent,#40cfff,transparent);
- animation:scan 4s linear infinite;
+.header{
+ text-align:center;border-color:#9b00ff;
+ box-shadow:0 0 20px #9500ff35,inset 0 0 15px #9500ff12;
+ padding:15px 10px
 }
-@keyframes scan{to{left:130%}}
-@keyframes entrance{
- from{opacity:0;transform:translateY(25px)}
- to{opacity:1;transform:translateY(0)}
+.crown{font-size:27px;filter:drop-shadow(0 0 8px #ffcc00)}
+.logo{
+ font-size:clamp(36px,10vw,56px);font-weight:1000;letter-spacing:3px;
+ background:linear-gradient(90deg,#fff,#00d9ff,#e5d8ff,#ffdb49);
+ -webkit-background-clip:text;background-clip:text;color:transparent
 }
-.period{
- display:flex;justify-content:space-between;align-items:center;
+.subtitle{font-size:13px;font-weight:bold;letter-spacing:2px;color:#ffdb42}
+.tagline{font-size:11px;color:#d4c7ff;margin-top:10px}
+.vip{
+ display:inline-block;margin-top:12px;padding:7px 18px;border-radius:30px;
+ border:1px solid #b500ff;color:#e8adff;font-size:12px;font-weight:bold;
+ box-shadow:0 0 12px #a000ff35
 }
-.muted{color:#8998b0;font-size:11px;font-weight:bold;letter-spacing:1px}
-.period-no{font-size:15px;font-weight:800;margin-top:7px}
-.timer{
- color:#ffdc38;font-size:27px;font-weight:900;
- text-shadow:0 0 18px #ffce35;
+.online{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;color:#00ff82;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:#00ff66;box-shadow:0 0 10px #00ff66}
+.title{font-size:15px;font-weight:bold;margin-bottom:12px}
+.cyan{color:var(--cyan)}.purple{color:#dc72ff}.gold{color:var(--gold)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.info-box{background:#050916;border:1px solid #284775;border-radius:13px;padding:11px}
+.label{font-size:11px;color:#9aa9c5;margin-bottom:7px}
+.value{font-size:17px;font-weight:bold;word-break:break-all}
+.clock{color:var(--cyan)}.timer{color:var(--gold)}.period{color:#fff}
+.result-panel{border-color:#00cfff;box-shadow:0 0 15px #00cfff25,inset 0 0 12px #a000ff10}
+.result-grid{display:grid;grid-template-columns:1fr 125px;gap:12px;align-items:center}
+.result-color{
+ text-align:center;padding:16px 5px;border-radius:14px;
+ border:1px solid var(--green);color:var(--green);
+ background:#00ff4c10;text-shadow:0 0 12px currentColor;
+ box-shadow:0 0 12px #00ff4c25;font-size:24px;font-weight:1000
 }
-.progress{
- height:4px;background:#222b40;
- border-radius:10px;margin-top:16px;overflow:hidden;
+.result-size{text-align:center;font-size:21px;font-weight:bold;margin-top:12px}
+.orb{
+ width:118px;height:118px;border-radius:50%;margin:auto;
+ border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;
+ flex-direction:column;box-shadow:0 0 18px #00d9ff45,inset 0 0 15px #bc39ff22;
 }
-.progress span{
- display:block;height:100%;width:50%;
- background:linear-gradient(90deg,#35caff,#ae69ff);
- box-shadow:0 0 12px #35caff;
- transition:width 1s linear;
+.orb-number{font-size:48px;font-weight:1000;color:#c5ff42;text-shadow:0 0 12px #c5ff42}
+.orb-caption{font-size:10px;color:#fff}
+.note{text-align:center;color:#aebbd1;font-size:11px;margin-top:12px;line-height:1.5}
+.btn{
+ width:100%;padding:13px;border-radius:30px;border:1px solid var(--purple);
+ background:linear-gradient(90deg,#27004b,#111d48,#31004c);
+ color:white;font-size:14px;font-weight:bold;margin-top:13px;
+ cursor:pointer;box-shadow:0 0 12px #bc39ff25
 }
-.signal{text-align:center;padding:23px 12px}
-.live{
- color:#45caff;font-size:12px;font-weight:bold;
- letter-spacing:2px;
- animation:pulse 1.5s infinite;
+.btn:active{transform:scale(.98)}
+.history-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.history-item{
+ background:#050813;border:1px solid #2c3e68;border-radius:10px;
+ padding:8px 2px;text-align:center
 }
-@keyframes pulse{
- 50%{opacity:.45;text-shadow:0 0 20px #36caff}
+.history-item small{font-size:9px;color:#c3cde1}
+.ball{
+ width:35px;height:35px;border-radius:50%;margin:7px auto;
+ display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:bold;
+ color:#fff
 }
-.signals{
- display:flex;justify-content:center;align-items:center;
- gap:13px;margin:20px 0;
+.green{background:#00c93c;box-shadow:0 0 10px #00c93c40}
+.red{background:#ed2835;box-shadow:0 0 10px #ed283540}
+.violet{background:#9200f5;box-shadow:0 0 10px #9200f540}
+.hcolor{font-size:9px;font-weight:bold}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:#050915;border:1px solid #2c3e68;border-radius:13px;padding:11px}
+.stat-name{font-size:12px;font-weight:bold}
+.stat-line{display:flex;justify-content:space-between;margin-top:10px;font-size:12px}
+.bar{height:7px;border-radius:20px;background:#1a2235;margin-top:6px;overflow:hidden}
+.fill{height:100%;border-radius:20px;transition:width .5s}
+.tips{display:grid;gap:9px}
+.tip{font-size:12px;color:#d7e1f3;line-height:1.5}
+.tip b{color:#00ff78}
+.nav{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:5px;
+ position:sticky;bottom:6px;background:#04050ddf;backdrop-filter:blur(12px);
+ border:1px solid #6a00b8;padding:7px;border-radius:17px
 }
-.tag{
- padding:12px 20px;border-radius:13px;
- font-size:18px;font-weight:900;
- border:1px solid;
- animation:glow 2s infinite alternate;
+.nav-item{text-align:center;color:#a7b3cb;font-size:10px;padding:7px 1px}
+.nav-item strong{display:block;font-size:18px;margin-bottom:4px}
+.nav-item.active{color:#fff;background:#43006e;border-radius:11px;box-shadow:0 0 10px #b000ff35}
+.footer{text-align:center;color:#71809c;font-size:10px;padding:15px 4px}
+@media(max-width:370px){
+ body{padding:8px}.value{font-size:15px}
+ .result-grid{grid-template-columns:1fr 100px}
+ .orb{width:95px;height:95px}.orb-number{font-size:40px}
+ .history-grid{gap:4px}.ball{width:31px;height:31px}
 }
-.red{color:#ff647e;border-color:#a63858;background:#ff345b18;box-shadow:0 0 20px #ff345b24}
-.big{color:#40caff;border-color:#25668d;background:#24baff18;box-shadow:0 0 20px #24baff24}
-.number{
- width:58px;height:58px;border-radius:50%;
- display:grid;place-items:center;
- font-size:26px;font-weight:900;
- border:3px solid #8294ae;
- background:radial-gradient(circle at 30% 20%,#65748a,#192337 65%);
- box-shadow:0 0 22px #7b9fff50,inset 0 0 15px #fff2;
- animation:rotateIn .7s ease,numberGlow 2s infinite alternate;
+@media(prefers-reduced-motion:reduce){
+ body::before{animation:none}
 }
-@keyframes rotateIn{
- from{transform:rotateY(180deg) scale(.4);opacity:0}
- to{transform:rotateY(0) scale(1);opacity:1}
-}
-@keyframes numberGlow{
- to{box-shadow:0 0 35px #4bbaff80,inset 0 0 20px #fff4}
-}
-@keyframes glow{to{filter:brightness(1.4)}}
-.stats{
- display:grid;grid-template-columns:1fr 1fr;gap:12px;
-}
-.stat{
- text-align:center;padding:13px;
- border-radius:14px;background:#101a2c;
- border:1px solid #202e46;
-}
-.stat small{display:block;color:#8b9ab2;font-size:11px}
-.stat strong{display:block;color:var(--green);margin-top:5px;font-size:15px}
-.section-title{
- text-align:center;color:#ffdc38;
- font-size:12px;font-weight:900;letter-spacing:1px;
- margin-bottom:16px;
-}
-.digits{
- display:grid;grid-template-columns:repeat(10,1fr);gap:5px;
-}
-.digit{
- padding:12px 0;border-radius:10px;
- background:linear-gradient(145deg,#202d42,#131d2d);
- color:white;border:1px solid #2a3c56;
- font-size:13px;font-weight:bold;
- cursor:pointer;transition:.25s;
-}
-.digit:active{transform:scale(.85)}
-.digit:hover{border-color:#40caff;box-shadow:0 0 15px #35caff55}
-.logs{margin-top:18px}
-.logrow{
- display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
- padding:12px 0;text-align:center;
- font-size:11px;color:#a8b7d0;
- border-bottom:1px solid #27334a;
- animation:entrance .4s ease;
-}
-.loghead{color:#74849e;font-weight:bold}
-.empty{color:#64738c;text-align:center;padding:18px;font-size:12px}
-.footer{text-align:center;margin-top:22px;color:#65738b;font-size:10px;letter-spacing:2px}
 </style>
 </head>
 <body>
-<div id="particles"></div>
+<canvas id="starfield"></canvas>
 <div class="container">
 
-<div class="header">
- <div class="logo">✦ WinGo Pro Predictor ✦</div>
- <div class="sub">AI NEURAL INTERFACE V4.0</div>
-</div>
+<header class="card header">
+ <div class="crown">👑</div>
+ <div class="logo">WINGO</div>
+ <div class="subtitle">1 MINUTE DASHBOARD</div>
+ <div class="tagline">✦ LIVE CLOCK • DEMO MODE • SAMPLE HISTORY ✦</div>
+ <div class="vip">✧ VIP S_GOD EDITION ✧</div>
+ <div class="online"><span class="dot"></span> SYSTEM ONLINE</div>
+</header>
 
-<div class="card">
- <div class="period">
+<section class="card">
+ <div class="info-grid">
+  <div class="info-box">
+   <div class="label">▥ CURRENT PERIOD</div>
+   <div class="value period" id="period">---</div>
+  </div>
+  <div class="info-box">
+   <div class="label">◷ LIVE TIME</div>
+   <div class="value clock" id="clock">--:--:--</div>
+  </div>
+  <div class="info-box">
+   <div class="label">◈ NEXT MINUTE</div>
+   <div class="value timer" id="timer">00:00</div>
+  </div>
+  <div class="info-box">
+   <div class="label">✦ DASHBOARD</div>
+   <div class="value purple">DEMO / SIM</div>
+  </div>
+ </div>
+</section>
+
+<section class="card result-panel">
+ <div class="title">🎯 Demo Sample</div>
+ <div class="result-grid">
   <div>
-   <div class="muted">ACTIVE PERIOD</div>
-   <div class="period-no" id="period">2026111900010286</div>
+   <div class="result-color" id="resultColor">READY</div>
+   <div class="result-size" id="resultSize">--</div>
   </div>
-  <div style="text-align:right">
-   <div class="muted">TIME LEFT</div>
-   <div class="timer" id="timer">00:30</div>
+  <div class="orb">
+   <span class="orb-number" id="resultNumber">?</span>
+   <span class="orb-caption">SAMPLE NUMBER</span>
   </div>
  </div>
- <div class="progress"><span id="bar"></span></div>
-</div>
+ <div class="note" id="demoText">Demo only. No prediction or accuracy claim.</div>
+ <button class="btn" onclick="runDemo()">✦ GENERATE RANDOM SAMPLE ✦</button>
+</section>
 
-<div class="card signal">
- <div class="live">✦ LIVE SIGNAL SYSTEM ✦</div>
- <div class="signals">
-  <div class="tag red" id="color">RED</div>
-  <div class="tag big" id="size">BIG</div>
-  <div class="number" id="number">6</div>
- </div>
- <div class="stats">
+<section class="card">
+ <div class="title purple">◷ Recent Demo History</div>
+ <div class="history-grid" id="history"></div>
+</section>
+
+<section class="card">
+ <div class="title cyan">▥ Sample Distribution</div>
+ <div class="stats-grid">
   <div class="stat">
-   <small>DEMO SIGNAL</small>
-   <strong>ACTIVE</strong>
+   <div class="stat-name" style="color:#00ff67">● GREEN</div>
+   <div class="stat-line"><span>Samples</span><b id="greenCount">0</b></div>
+   <div class="bar"><div class="fill" id="greenBar" style="width:0;background:#00ff67"></div></div>
   </div>
   <div class="stat">
-   <small>VERIFIED RESULTS</small>
-   <strong id="count">0</strong>
+   <div class="stat-name" style="color:#ff3848">● RED</div>
+   <div class="stat-line"><span>Samples</span><b id="redCount">0</b></div>
+   <div class="bar"><div class="fill" id="redBar" style="width:0;background:#ff3848"></div></div>
+  </div>
+  <div class="stat">
+   <div class="stat-name" style="color:#c300ff">● VIOLET</div>
+   <div class="stat-line"><span>Samples</span><b id="violetCount">0</b></div>
+   <div class="bar"><div class="fill" id="violetBar" style="width:0;background:#c300ff"></div></div>
+  </div>
+  <div class="stat">
+   <div class="stat-name" style="color:#00baff">◆ SIZE SPLIT</div>
+   <div class="stat-line"><span>Big / Small</span><b id="sizeCount">0 / 0</b></div>
+   <div class="bar"><div class="fill" id="sizeBar" style="width:0;background:#00baff"></div></div>
   </div>
  </div>
-</div>
+</section>
 
-<div class="card">
- <div class="section-title">TAP REAL RESULT (VERIFY MATCH)</div>
- <div class="digits" id="digits"></div>
-</div>
-
-<div class="card logs">
- <div class="muted" style="margin-bottom:18px">VERIFICATION LOGS</div>
- <div class="logrow loghead">
-  <span>PERIOD</span><span>DEMO</span>
-  <span>ACTUAL</span><span>STATUS</span>
+<section class="card">
+ <div class="title gold">✧ Dashboard Info</div>
+ <div class="tips">
+  <div class="tip">✦ <b>Live clock:</b> updates using your device time.</div>
+  <div class="tip">✦ <b>Period display:</b> demo clock-based counter.</div>
+  <div class="tip">✦ <b>Random sample:</b> generated locally on button press.</div>
+  <div class="tip">✦ <b>Reminder:</b> sample outcomes cannot forecast actual game results.</div>
  </div>
- <div id="history">
-  <div class="empty">AWAITING RESULT INPUT...</div>
- </div>
-</div>
+</section>
 
-<div class="footer">WIN GO PRO • NEURAL UI V4.0</div>
+<nav class="nav">
+ <div class="nav-item active"><strong>⌂</strong>Home</div>
+ <div class="nav-item"><strong>▥</strong>Stats</div>
+ <div class="nav-item" onclick="runDemo()"><strong>✦</strong>Sample</div>
+ <div class="nav-item"><strong>◷</strong>History</div>
+</nav>
+
+<footer class="footer">WINGO • NEON DEMO UI • RANDOM SAMPLE ONLY</footer>
 </div>
 
 <script>
-const particleBox=document.getElementById('particles');
-for(let i=0;i<35;i++){
- const p=document.createElement('div');
- p.className='particle';
- p.style.left=Math.random()*100+'%';
- p.style.animationDuration=(6+Math.random()*12)+'s';
- p.style.animationDelay=(-Math.random()*15)+'s';
- particleBox.appendChild(p);
+// CLOCK AND DEMO PERIOD DISPLAY
+function updateClock(){
+ const now=new Date();
+ document.getElementById("clock").textContent=
+  now.toLocaleTimeString("en-IN",{hour12:false});
+
+ const remaining=59-now.getSeconds();
+ document.getElementById("timer").textContent=
+  "00:"+String(remaining).padStart(2,"0");
+
+ const dateStr=now.getFullYear()+
+  String(now.getMonth()+1).padStart(2,"0")+
+  String(now.getDate()).padStart(2,"0");
+
+ const minuteNumber=now.getHours()*60+now.getMinutes();
+ document.getElementById("period").textContent=
+  dateStr+String(minuteNumber).padStart(4,"0");
+}
+updateClock();
+setInterval(updateClock,1000);
+
+// DEMO HISTORY
+let demoHistory=[
+ {n:7,c:"Green"},{n:2,c:"Red"},{n:0,c:"Violet"},
+ {n:4,c:"Red"},{n:9,c:"Green"},{n:3,c:"Red"},
+ {n:5,c:"Violet"},{n:8,c:"Green"},{n:1,c:"Red"},{n:6,c:"Green"}
+];
+
+function renderHistory(){
+ const history=document.getElementById("history");
+ history.innerHTML=demoHistory.map((item,i)=>`
+  <div class="history-item">
+   <small>#${demoHistory.length-i}</small>
+   <div class="ball ${item.c.toLowerCase()}">${item.n}</div>
+   <div class="hcolor" style="color:${item.c==="Green"?"#00ff67":item.c==="Red"?"#ff3848":"#c300ff"}">${item.c}</div>
+  </div>`).join("");
+}
+renderHistory();
+
+// UPDATE SAMPLE STATS FROM HISTORY
+function updateStats(){
+ const total=demoHistory.length||1;
+ let greens=0,reds=0,violets=0,bigs=0,smalls=0;
+ demoHistory.forEach(item=>{
+  if(item.c==="Green")greens++;
+  else if(item.c==="Red")reds++;
+  else violets++;
+  if(item.n>=5)bigs++;else smalls++;
+ });
+ document.getElementById("greenCount").textContent=greens;
+ document.getElementById("redCount").textContent=reds;
+ document.getElementById("violetCount").textContent=violets;
+ document.getElementById("sizeCount").textContent=bigs+" / "+smalls;
+ document.getElementById("greenBar").style.width=(greens/total*100)+"%";
+ document.getElementById("redBar").style.width=(reds/total*100)+"%";
+ document.getElementById("violetBar").style.width=(violets/total*100)+"%";
+ document.getElementById("sizeBar").style.width=(bigs/total*100)+"%";
+}
+updateStats();
+
+// RANDOM SAMPLE GENERATOR
+function runDemo(){
+ const n=Math.floor(Math.random()*10);
+ let c="Red";
+ if(n===0||n===5)c="Violet";
+ else if([1,3,7,9].includes(n))c="Green";
+ else c="Red";
+
+ const size=n>=5?"BIG":"SMALL";
+ const color=document.getElementById("resultColor");
+ color.textContent=c.toUpperCase();
+ color.style.color=c==="Green"?"#00ff67":c==="Red"?"#ff3848":"#c300ff";
+ color.style.borderColor=color.style.color;
+ color.style.boxShadow="0 0 15px "+color.style.color+"35";
+
+ document.getElementById("resultSize").textContent=size;
+ document.getElementById("resultNumber").textContent=n;
+ document.getElementById("demoText").textContent=
+  "Random sample generated • Not a forecast";
+
+ demoHistory.unshift({n,c});
+ if(demoHistory.length>10)demoHistory.pop();
+ renderHistory();
+ updateStats();
 }
 
-let time=30;
-let period=286;
-let verified=0;
-let demoNumber=6;
+// =============================
+// LIVE MOVING STARFIELD
+// =============================
+(function(){
+ const canvas=document.getElementById("starfield");
+ const ctx=canvas.getContext("2d");
+ let w=0,h=0,stars=[],shooters=[];
+ const STAR_COUNT=100;
+ let last=0;
 
-const $=id=>document.getElementById(id);
-
-function updateTimer(){
- time--;
- if(time<0){
-  time=30;
-  period++;
-  $('period').textContent='2026111900010'+period;
-  demoNumber=Math.floor(Math.random()*10);
-  updateSignal();
+ function resize(){
+  w=window.innerWidth;
+  h=window.innerHeight;
+  const dpr=Math.min(window.devicePixelRatio||1,1.5);
+  canvas.width=Math.round(w*dpr);
+  canvas.height=Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  stars=Array.from({length:STAR_COUNT},()=>({
+   x:Math.random()*w,y:Math.random()*h,
+   r:.3+Math.random()*1.35,
+   speed:.018+Math.random()*.045,
+   alpha:.2+Math.random()*.7,
+   phase:Math.random()*6.28,
+   twinkle:.001+Math.random()*.002,
+   drift:(Math.random()-.5)*.025
+  }));
  }
- $('timer').textContent='00:'+String(time).padStart(2,'0');
- $('bar').style.width=(time/30*100)+'%';
-}
-setInterval(updateTimer,1000);
 
-function updateSignal(){
- const n=demoNumber;
- $('number').textContent=n;
- $('number').style.animation='none';
- void $('number').offsetWidth;
- $('number').style.animation='rotateIn .7s ease,numberGlow 2s infinite alternate';
- $('color').textContent=n%2===0?'RED':'GREEN';
- $('color').className='tag '+(n%2===0?'red':'big');
- $('size').textContent=n>=5?'BIG':'SMALL';
-}
-updateSignal();
+ function drawStar(s,t,dt){
+  s.y-=s.speed*dt;
+  s.x+=s.drift*dt;
+  if(s.y< -3){s.y=h+3;s.x=Math.random()*w}
+  if(s.x<0)s.x=w;
+  if(s.x>w)s.x=0;
 
-const digits=$('digits');
-for(let i=0;i<10;i++){
- const b=document.createElement('button');
- b.className='digit';
- b.textContent=i;
- b.onclick=()=>addResult(i);
- digits.appendChild(b);
-}
+  const pulse=(Math.sin(t*s.twinkle+s.phase)+1)/2;
+  const a=s.alpha*(.35+.65*pulse);
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+  ctx.fillStyle=`rgba(210,230,255,${a})`;
+  ctx.fill();
 
-function addResult(n){
- verified++;
- $('count').textContent=verified;
- const row=document.createElement('div');
- row.className='logrow';
- const status=n===demoNumber?'MATCH':'NO MATCH';
- row.innerHTML=
- '<span>'+period+'</span>'+
- '<span>'+demoNumber+'</span>'+
- '<span>'+n+'</span>'+
- '<span style="color:'+(status==='MATCH'?'#30e99a':'#ff647e')+'">'+status+'</span>';
- const history=$('history');
- if(history.querySelector('.empty'))history.innerHTML='';
- history.prepend(row);
- while(history.children.length>8)history.lastElementChild.remove();
-}
+  if(s.r>1.15&&pulse>.88){
+   ctx.beginPath();
+   ctx.arc(s.x,s.y,s.r*2.5,0,Math.PI*2);
+   ctx.fillStyle=`rgba(100,190,255,${a*.12})`;
+   ctx.fill();
+  }
+ }
+
+ function spawnShooter(){
+  if(Math.random()<.0015&&shooters.length<2){
+   shooters.push({
+    x:Math.random()*w*.8,
+    y:Math.random()*h*.4,
+    vx:.18+Math.random()*.25,
+    vy:.12+Math.random()*.2,
+    life:1,length:45+Math.random()*65
+   });
+  }
+ }
+
+ function drawShooters(dt){
+  shooters.forEach(s=>{
+   s.x+=s.vx*dt;
+   s.y+=s.vy*dt;
+   s.life-=.0012*dt;
+   const grad=ctx.createLinearGradient(
+    s.x,s.y,s.x-s.length,s.y-s.length*.4
+   );
+   grad.addColorStop(0,`rgba(255,255,255,${Math.max(0,s.life)})`);
+   grad.addColorStop(1,"rgba(0,200,255,0)");
+   ctx.beginPath();
+   ctx.moveTo(s.x,s.y);
+   ctx.lineTo(s.x-s.length,s.y-s.length*.4);
+   ctx.strokeStyle=grad;
+   ctx.lineWidth=1.3;
+   ctx.stroke();
+  });
+  shooters=shooters.filter(s=>s.life>0);
+ }
+
+ function frame(t){
+  const dt=Math.min(t-last||16,40);
+  last=t;
+  ctx.clearRect(0,0,w,h);
+  stars.forEach(s=>drawStar(s,t,dt));
+  spawnShooter();
+  drawShooters(dt);
+  requestAnimationFrame(frame);
+ }
+
+ window.addEventListener("resize",resize);
+ resize();
+ requestAnimationFrame(frame);
+})();
 </script>
 </body>
 </html>
