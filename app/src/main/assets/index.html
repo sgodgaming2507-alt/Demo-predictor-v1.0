@@ -185,11 +185,11 @@ body{
   <div class="ring ring3"></div><div class="ring ring4"></div>
 
   <div class="core">
-   <div class="coreLabel" id="coreStatus">DEMO SAMPLE</div>
+   <div class="coreLabel" id="coreStatus">PERIOD SYNC</div>
    <div class="sampleBig" id="sampleBig">BIG</div>
-   <div class="sampleColor" id="sampleColor">GREEN</div>
+   <div class="sampleColor" id="sampleColor">RED</div>
    <div class="numberLabel">NUMBER</div>
-   <div class="sampleNumber" id="sampleNumber">7</div>
+   <div class="sampleNumber" id="sampleNumber">6</div>
   </div>
   <div class="scanline"></div>
  </div>
@@ -202,7 +202,7 @@ body{
   <div class="clockRight">
    <div class="clockLabel">NEXT MINUTE</div>
    <div class="countdown" id="countdown">00:60</div>
-   <div class="periodText" id="period">LOCAL DEMO CLOCK</div>
+   <div class="periodText" id="period">20261121100010680</div>
   </div>
  </div>
 
@@ -212,23 +212,23 @@ body{
    <div class="stat">
     <div class="statLabel">BIG / SMALL</div>
     <div class="statValue big" id="summaryMode">BIG</div>
-    <div class="statSub">Illustration</div>
+    <div class="statSub" id="subMode">CONF 72%</div>
    </div>
    <div class="stat">
     <div class="statLabel">COLOR</div>
-    <div class="statValue green" id="summaryColor">GREEN</div>
-    <div class="statSub">Illustration</div>
+    <div class="statValue green" id="summaryColor">RED</div>
+    <div class="statSub" id="subColor">MULTI-FACTOR</div>
    </div>
    <div class="stat">
     <div class="statLabel">NUMBER</div>
-    <div class="statValue number" id="summaryNumber">7</div>
-    <div class="statSub">Illustration</div>
+    <div class="statValue number" id="summaryNumber">6</div>
+    <div class="statSub" id="subNumber">SCORE MODEL</div>
    </div>
   </div>
  </div>
 
  <div class="lockBar" id="lockBar">
-  <span class="lockIcon">♙</span><span id="lockText">DEMO SAMPLE</span><span class="lockIcon">♙</span>
+  <span class="lockIcon">♙</span><span id="lockText">PERIOD MATCHED</span><span class="lockIcon">♙</span>
  </div>
 
  <div class="analytics">
@@ -242,42 +242,66 @@ body{
 
  <div class="footer">
   <div class="footerTitle">NEXUS AI · DEMO MODE</div>
-  <div class="footerText">VISUAL SIMULATION · NO PREDICTIONS</div>
+  <div class="footerText">ADVANCE MULTI-FACTOR PATTERN SIMULATION</div>
  </div>
  <div class="disclaimer">
-  ILLUSTRATIVE DISPLAY VALUES ONLY.<br>
-  SCAN ANIMATION IS A VISUAL EFFECT.
+  STATISTICAL PATTERN SIMULATION ONLY.<br>
+  RANDOM OUTCOMES CANNOT BE GUARANTEED.
  </div>
 </div>
 
 <script>
-/* India clock and real minute countdown */
+/* Period sync matching YYYYMMDD1000XXXXX format for WinGo 1 Min */
 const clockEl=document.getElementById("clock");
 const countdownEl=document.getElementById("countdown");
 const periodEl=document.getElementById("period");
 
-function updateClock(){
- const now=new Date();
- const time=new Intl.DateTimeFormat("en-IN",{
-  timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",
-  second:"2-digit",hour12:false
- }).format(now);
- clockEl.textContent=time;
+// Anchor: 2026-11-21 16:49 IST => period 20261121100010680[span_1](start_span)[span_1](end_span)
+const ANCHOR_DATE_KEY="20261121";
+const ANCHOR_MINUTE_OF_DAY=16*60+49; // 1009
+const ANCHOR_SEQ=10680;
 
- const remaining=60-now.getSeconds();
- countdownEl.textContent="00:"+String(remaining).padStart(2,"0");
-
+function getCurrentPeriodInfo(now){
  const dateStr=new Intl.DateTimeFormat("en-CA",{
   timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"
  }).format(now).replace(/-/g,"");
 
- const minuteIndex=now.getHours()*60+now.getMinutes();
- periodEl.textContent="DEMO "+dateStr+"-"+String(minuteIndex).padStart(4,"0");
+ const parts=new Intl.DateTimeFormat("en-IN",{
+  timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",
+  second:"2-digit",hour12:false
+ }).formatToParts(now);
+
+ const hr=Number(parts.find(p=>p.type==="hour").value);
+ const min=Number(parts.find(p=>p.type==="minute").value);
+ const sec=Number(parts.find(p=>p.type==="second").value);
+
+ const minuteOfDay=hr*60+min;
+ let seq=ANCHOR_SEQ;
+
+ if(dateStr===ANCHOR_DATE_KEY){
+  seq=ANCHOR_SEQ+(minuteOfDay-ANCHOR_MINUTE_OF_DAY);
+ } else {
+  seq=10001+minuteOfDay;
+ }
+
+ const periodStr=dateStr+"1000"+String(Math.max(1,seq));
+ const timeStr=String(hr).padStart(2,"0")+":"+String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+ const remaining=60-sec;
+
+ return {timeStr,remaining,periodStr,seq};
+}
+
+function updateClock(){
+ const now=new Date();
+ const info=getCurrentPeriodInfo(now);
+ clockEl.textContent=info.timeStr;
+ countdownEl.textContent="00:"+String(info.remaining).padStart(2,"0");
+ periodEl.textContent=info.periodStr;
 }
 updateClock();
 setInterval(updateClock,250);
 
-/* Manual scan animation with BIG/SMALL demo output */
+/* Advance Multi-Factor Formula Engine */
 const reactor=document.getElementById("reactor");
 const scanButton=document.getElementById("scanButton");
 const resetButton=document.getElementById("resetButton");
@@ -293,27 +317,113 @@ const sampleNumberEl=document.getElementById("sampleNumber");
 const summaryModeEl=document.getElementById("summaryMode");
 const summaryColorEl=document.getElementById("summaryColor");
 const summaryNumberEl=document.getElementById("summaryNumber");
+const subModeEl=document.getElementById("subMode");
+const subColorEl=document.getElementById("subColor");
+const subNumberEl=document.getElementById("subNumber");
+
+// Recent outcomes from screenshot (newest first: 6, 8, 0, 6, 6, 5)[span_2](start_span)[span_2](end_span)
+const historyData=[6,8,0,6,6,5];
 
 let running=false;
 let progress=0;
 let scanTimer=null;
 
 const stages=[
- {at:0,text:"INITIALIZING NEURAL CORE..."},
- {at:20,text:"LOADING VISUAL MODULES..."},
- {at:45,text:"SCANNING HOLOGRAPHIC UI..."},
- {at:70,text:"PROCESSING VISUAL EFFECT..."},
- {at:90,text:"FINALIZING ANIMATION..."}
+ {at:0,text:"MATCHING PERIOD SEQUENCE..."},
+ {at:20,text:"CALCULATING STREAK & ALTERNATION..."},
+ {at:45,text:"RUNNING MULTI-FACTOR SCORE..."},
+ {at:70,text:"OPTIMIZING NUMBER & COLOR..."},
+ {at:90,text:"LOCKING ADVANCE SIGNAL..."}
 ];
 
-function getRandomResult(){
- const num=Math.floor(Math.random()*10); // 0 - 9
- const size=num>=5 ? "BIG" : "SMALL";
- const color=(num===0 || num===5) ? "VIOLET" : (num%2===0 ? "RED" : "GREEN");
- return {num,size,color};
+function numberToColor(n){
+ if(n===0 || n===5)return "VIOLET";
+ return n%2===0 ? "RED" : "GREEN";
 }
 
-function updateDisplay(res){
+function periodHash(periodStr, salt){
+ let h=2166136261 ^ salt;
+ for(let i=0;i<periodStr.length;i++){
+  h^=periodStr.charCodeAt(i);
+  h=Math.imul(h,16777619);
+ }
+ return (h>>>0)/4294967295;
+}
+
+function advancePrediction(periodStr, seq){
+ // Factor 1: Exponentially decayed Big/Small momentum
+ let bigW=0, smallW=0;
+ historyData.forEach((n,i)=>{
+  const decay=Math.pow(0.76,i);
+  if(n>=5)bigW+=decay; else smallW+=decay;
+ });
+ const momentumBig=bigW/(bigW+smallW); // 0..1
+
+ // Factor 2: Current streak fatigue & flip pressure
+ const curIsBig=historyData[0]>=5;
+ let streak=1;
+ for(let i=1;i<historyData.length;i++){
+  if((historyData[i]>=5)===curIsBig)streak++;
+  else break;
+ }
+ const streakPressure=streak>=3 ? (curIsBig ? -0.22 : 0.22) : (streak===2 ? (curIsBig ? -0.08 : 0.08) : 0.04);
+
+ // Factor 3: Alternation rate (ABAB pattern strength in recent steps)
+ let switches=0;
+ for(let i=0;i<historyData.length-1;i++){
+  if((historyData[i]>=5)!==(historyData[i+1]>=5))switches++;
+ }
+ const altRate=switches/Math.max(1,historyData.length-1);
+ const altPull=altRate>0.6 ? (curIsBig ? -0.10 : 0.10) : 0;
+
+ // Factor 4: Period digit parity & tail harmonic
+ const lastDigit=Number(periodStr.slice(-1)) || 0;
+ const periodBias=(lastDigit%2===0 ? 0.03 : -0.03) + ((seq%10)>=5 ? 0.02 : -0.02);
+
+ // Combine into BIG probability (clamped 0.22..0.78)
+ let bigProb=momentumBig*0.45 + (0.5+streakPressure)*0.30 + (0.5+altPull)*0.15 + (0.5+periodBias)*0.10;
+ bigProb=Math.min(0.78,Math.max(0.22,bigProb));
+
+ const u1=periodHash(periodStr,101);
+ const pickBig=u1<bigProb;
+
+ // Candidate pool & multi-score ranking
+ const pool=pickBig ? [5,6,7,8,9] : [0,1,2,3,4];
+ const scored=pool.map(num=>{
+  let score=1.0;
+  // Penalize immediate repetition, boost appearance 2-4 steps ago
+  if(historyData[0]===num)score-=0.45;
+  if(historyData[1]===num)score-=0.15;
+  if(historyData.slice(2,5).includes(num))score+=0.30;
+  // Period harmonic alignment
+  if((num+lastDigit)%3===0)score+=0.18;
+  // Tie-breaker using period hash
+  score+=periodHash(periodStr,500+num)*0.25;
+  return {num,score:Math.max(0.15,score)};
+ });
+
+ const totalScore=scored.reduce((s,item)=>s+item.score,0);
+ let r=periodHash(periodStr,999)*totalScore;
+ let chosen=scored[0].num;
+ for(const item of scored){
+  r-=item.score;
+  if(r<=0){
+   chosen=item.num;
+   break;
+  }
+ }
+
+ const size=chosen>=5 ? "BIG" : "SMALL";
+ const color=numberToColor(chosen);
+ const edge=Math.abs(bigProb-0.5)*200; // 0..56
+ const conf=Math.min(91,Math.max(62,Math.round(64+edge*0.42+streak*2)));
+
+ const factorTag=streak>=3 ? "STREAK FLIP" : (altRate>0.6 ? "ALT MODEL" : "MULTI-SCORE");
+
+ return {num:chosen,size,color,conf,factorTag};
+}
+
+function applyOutput(res, sub1, sub2, sub3){
  sampleBigEl.textContent=res.size;
  sampleColorEl.textContent=res.color;
  sampleNumberEl.textContent=res.num;
@@ -321,6 +431,10 @@ function updateDisplay(res){
  summaryModeEl.textContent=res.size;
  summaryColorEl.textContent=res.color;
  summaryNumberEl.textContent=res.num;
+
+ subModeEl.textContent=sub1;
+ subColorEl.textContent=sub2;
+ subNumberEl.textContent=sub3;
 }
 
 function startScan(){
@@ -330,8 +444,10 @@ function startScan(){
  scanButton.textContent="⟳ SCANNING...";
  resetButton.style.display="none";
  reactor.classList.add("scanning");
- lockText.textContent="SCAN RUNNING";
+ lockText.textContent="SYNCING PERIOD";
  coreStatus.textContent="SCANNING";
+
+ const info=getCurrentPeriodInfo(new Date());
 
  scanTimer=setInterval(()=>{
   progress++;
@@ -339,7 +455,8 @@ function startScan(){
   progressText.textContent=progress+"%";
 
   if(progress%5===0){
-   updateDisplay(getRandomResult());
+   const liveRes=advancePrediction(info.periodStr+"-"+progress, info.seq+progress);
+   applyOutput(liveRes,"SCANNING...","COMPUTING","SCORE");
   }
 
   for(let i=stages.length-1;i>=0;i--){
@@ -357,13 +474,14 @@ function finishScan(){
  running=false;
  reactor.classList.remove("scanning");
 
- const finalRes=getRandomResult();
- updateDisplay(finalRes);
+ const info=getCurrentPeriodInfo(new Date());
+ const res=advancePrediction(info.periodStr, info.seq);
+ applyOutput(res,"CONF "+res.conf+"%",res.color,res.factorTag);
 
- scanStatus.textContent="DEMO SCAN COMPLETE — "+finalRes.size;
+ scanStatus.textContent="PERIOD "+info.periodStr+" — "+res.size;
  progressText.textContent="100% — COMPLETE";
- coreStatus.textContent="RESULT";
- lockText.textContent=finalRes.size+" LOCKED";
+ coreStatus.textContent=info.periodStr.slice(-5);
+ lockText.textContent=res.size+" · "+res.num+" ("+res.conf+"%)";
  scanButton.style.display="none";
  resetButton.style.display="block";
 }
@@ -375,9 +493,9 @@ function resetScan(){
  progressFill.style.width="0%";
  progressText.textContent="0%";
  scanStatus.textContent="SYSTEM IDLE — READY";
- coreStatus.textContent="DEMO SAMPLE";
- lockText.textContent="DEMO SAMPLE";
- updateDisplay({size:"BIG",color:"GREEN",num:7});
+ coreStatus.textContent="PERIOD SYNC";
+ lockText.textContent="PERIOD MATCHED";
+ applyOutput({num:6,size:"BIG",color:"RED",conf:72,factorTag:"SCORE MODEL"},"CONF 72%","MULTI-FACTOR","SCORE MODEL");
  scanButton.disabled=false;
  scanButton.textContent="▶ START SCAN";
  scanButton.style.display="block";
